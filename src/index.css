@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  margin: 0px;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --green: #122315;
+  --off-white: #f3ede4;
+  --deacon: Deacon, sans-serif;
+  --neon-100: #55dd4a;
+  --graphik: Graphik, sans-serif;
+  --neon-80: #77e46e;
+  --neon-130: #3b9b34;
+  --neon-50: #abe59e;
+  --stroke-18: rgba(62, 96, 68, 0.18);
+  --turquoise-100: #73d3eb;
+  --stroke-30-light: rgba(243, 240, 236, 0.3);
+  --stroke-divider: rgba(18, 35, 21, 0.48);
+  --white: white;
+  --black: black;
+}
+.nav-logo-div {
+  height: 60px;
+  width: auto;
+  object-fit: cover;
+}
+.nav-link-hover:hover {
+  color: var(--off-white);
+  border-bottom: 2px solid white;
+  transition: all 100ms;
+}
+.hero-image {
+  background-image: url(./assets/bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 98vw;
+}
+@keyframes rise-trek {
+  0% {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(20%);
+    opacity: 1;
+  }
+}
+
+@keyframes rise-future {
+  0% {
+    transform: translateY(40%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+.animate-trek-text {
+  opacity: 0;
+  animation: 400ms linear 1s running rise-trek;
+  animation-fill-mode: forwards;
+}
+.animate-future-text {
+  opacity: 0;
+  animation: 500ms linear 1s running rise-future;
+  animation-fill-mode: forwards;
+}
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--off-white);
+  color: var(--green);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above other content */
+}

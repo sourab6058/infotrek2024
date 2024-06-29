@@ -1,0 +1,43 @@
+.login-section {
+  position: relative;
+  overflow: hidden;
+}
+.random-img {
+  position: absolute;
+}
+.img-1 {
+  max-height: 250px;
+  top: -80px;
+  right: 180px;
+  transform: rotate(10deg);
+}
+.img-2 {
+  max-height: 250px;
+  bottom: 20px;
+  right: -80px;
+  transform: rotate(-30deg);
+}
+.img-3 {
+  height: 200px;
+  top: 100px;
+  right: 20px;
+  transform: rotate(45deg);
+}
+.img-4 {
+  height: 250px;
+  top: 70px;
+  left: 40px;
+  transform: rotate(25deg);
+}
+.img-5 {
+  height: 120px;
+  top: 230px;
+  left: 80px;
+  transform: rotate(-25deg);
+}
+.img-6 {
+  height: 250px;
+  bottom: -70px;
+  left: 120px;
+  transform: rotate(25deg);
+}
