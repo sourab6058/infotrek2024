@@ -10,7 +10,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Events from "./pages/Events.jsx";
 import AdminPage from "./admin/AdminPage.jsx";
-import { v4 as uuid } from "uuid";
+import EventManager from "./admin/event/EventManager.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/*",
     element: <AdminPage />,
+  },
+  {
+    path: "/manage-events",
+    element: <EventManager />,
   },
   {
     path: "/",
