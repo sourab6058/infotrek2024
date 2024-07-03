@@ -11,6 +11,7 @@ import Register from "./pages/Register.jsx";
 import Events from "./pages/Events.jsx";
 import AdminPage from "./admin/AdminPage.jsx";
 import EventManager from "./admin/event/EventManager.jsx";
+import TeamPage from "./pages/TeamPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/manage-events",
     element: <EventManager />,
+  },
+  {
+    path: "/team",
+    element: <TeamPage />,
   },
   {
     path: "/",

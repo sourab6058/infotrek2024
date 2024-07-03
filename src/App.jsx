@@ -5,7 +5,7 @@ import ChatButton from "./components/ChatButton";
 function App() {
   return (
     <div className="main">
-      <Nav />
+      <Nav dark={true} />
       <Hero />
       <ChatButton />
     </div>
