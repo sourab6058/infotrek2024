@@ -2,22 +2,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Dropdown, Form, Modal } from "react-bootstrap";
 
+import formatDateyyyyMMdd from "../../../utils/formatDateyyyyMMdd";
+
 export default function EditEventModal({
   isEditEventModalOpen,
   setIsEditEventModalOpen,
   data,
   rowChosen,
+  setData,
+  fullData,
 }) {
-  const dateFromFormat = new Date(data.date_from);
-  const dataToFormat = new Date(data.date_to);
+  const [id, setId] = useState("");
   const [name, setName] = useState(data.name);
   const [description, setDescription] = useState(data.description);
-  const [dateFrom, setDateFrom] = useState(
-    `${
-      dateFromFormat.getFullYear
-    }-${dateFromFormat.getMonth()}-${dateFromFormat.getDay()}`
-  );
-  const [dateTo, setDateTo] = useState(data.date_to);
+  const [dateFrom, setDateFrom] = useState("1999-01-01");
+  const [dateTo, setDateTo] = useState("1999-01-01");
   const [location, setLocation] = useState(data.location);
   const [category, setCategory] = useState(data.category);
   const [status, setStatus] = useState(data.status);
@@ -31,8 +30,22 @@ export default function EditEventModal({
     setCategory("");
     setStatus("");
   }
-  useState(() => {
-    console.log(data);
+
+  useEffect(() => {
+    const fromDate = data?.date_from
+      ? formatDateyyyyMMdd(data.date_from)
+      : "1999-01-01";
+    const toDate = data?.date_to
+      ? formatDateyyyyMMdd(data.date_to)
+      : "1999-01-01";
+    setId(data.id);
+    setName(data.name);
+    setDescription(data.description);
+    setDateFrom(fromDate);
+    setDateTo(toDate);
+    setLocation(data.location);
+    setCategory(data.category);
+    setStatus(data.status);
   }, [rowChosen]);
 
   function handleSubmit(
@@ -58,6 +71,7 @@ export default function EditEventModal({
       return;
     }
     const data = {
+      id,
       name,
       description,
       dateFrom,
@@ -66,11 +80,20 @@ export default function EditEventModal({
       category,
       status,
     };
-    axios.post("http://localhost:3000/api/events", data).then((res) => {
-      if (res.status === 201) {
-        clearForm();
-      }
-    });
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      alert("You are not authorized.");
+      return;
+    }
+    axios
+      .patch(`http://localhost:3000/api/event/${id}`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.reload(false);
+        }
+      });
     setIsEditEventModalOpen(false);
   }
 

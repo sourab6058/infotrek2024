@@ -55,11 +55,22 @@ export default function AddEventModal({
       category,
       status,
     };
-    axios.post("http://localhost:3000/api/events", data).then((res) => {
-      if (res.status === 201) {
-        clearForm();
-      }
-    });
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      alert("You are not authorized.");
+      return;
+    }
+    axios
+      .post("http://localhost:3000/api/event", data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        if (res.status === 201) {
+          clearForm();
+          console.log(res.data);
+          window.location.reload(false);
+        }
+      });
     setIsEventModalOpen(false);
   }
 

@@ -48,7 +48,7 @@ export default function Nav({ dark }) {
         </li>
       </ol>
       <div className="flex justify-around items-center min-w-[240px]">
-        <Link to="login" className="no-underline text-center">
+        <Link to="/login" className="no-underline text-center">
           <div
             className={`border rounded-md py-2 px-3 ${
               dark ? "hover:bg-green-900" : ""

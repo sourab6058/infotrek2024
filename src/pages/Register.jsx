@@ -1,4 +1,4 @@
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
@@ -16,8 +16,8 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   function handleSubmit(e, data) {
-    redirect("/login");
     e.preventDefault();
     console.log(data);
     try {
@@ -28,6 +28,7 @@ function Register() {
           setName("");
           setEmail("");
           setPassword("");
+          navigate("/login");
           console.log({ response });
         });
     } catch (err) {
@@ -77,6 +78,7 @@ function Register() {
               ? "p-2 w-100 rounded mt-3 text-2xl font-semibold border"
               : "p-2 w-100 rounded mt-3 text-2xl font-semibold text-green-1000 bg-neon-80 border"
           }
+          onClick={(e) => handleSubmit(e, { name, email, password })}
         >
           REGISTER
         </button>

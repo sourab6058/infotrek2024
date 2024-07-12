@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
+import { v4 as uuidv4 } from "uuid";
 
 import EditEventModal from "./EditEventModal";
 
@@ -12,15 +13,36 @@ export default function EventsTable() {
 
   function handleEdit(idx) {
     setRowChosen(idx);
-    console.log(data[idx]);
     setIsEditEventModalOpen(true);
   }
 
+  function handleDelete(id) {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      alert("You are not authorized.");
+      return;
+    }
+    let confirmAction = confirm(
+      "❗❗Are you sure you want to DELETE THE EVENT?❗❗"
+    );
+
+    if (confirmAction) {
+      axios
+        .delete(`http://localhost:3000/api/event/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            window.location.reload(false);
+          }
+        });
+    }
+  }
+
   useEffect(() => {
-    axios.get("http://localhost:3000/api/events").then((res) => {
+    axios.get("http://localhost:3000/api/event").then((res) => {
       if (res.status === 200) {
         setData(res.data);
-        console.log(res.data);
       }
     });
   }, []);
@@ -34,7 +56,7 @@ export default function EventsTable() {
       >
         <thead>
           <tr>
-            <th>Seq No</th>
+            <th key={uuidv4()}>Seq No</th>
             <th>Name</th>
             <th>Description</th>
             <th>Date From</th>
@@ -62,7 +84,7 @@ export default function EventsTable() {
               idx
             ) => (
               <>
-                <tr>
+                <tr key={id}>
                   <td>{idx + 1}</td>
                   <td>{name}</td>
                   <td>{description.substring(0, 35)}</td>
@@ -75,7 +97,9 @@ export default function EventsTable() {
                     <Button onClick={() => handleEdit(idx)}>Edit</Button>
                   </td>
                   <td>
-                    <Button variant="danger">Delete</Button>
+                    <Button variant="danger" onClick={() => handleDelete(id)}>
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               </>
@@ -87,6 +111,8 @@ export default function EventsTable() {
         isEditEventModalOpen={isEditEventModalOpen}
         setIsEditEventModalOpen={setIsEditEventModalOpen}
         data={rowChosen > -1 ? data[rowChosen] : {}}
+        setData={setData}
+        fullData={data}
         rowChosen={rowChosen}
       />
     </>

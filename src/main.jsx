@@ -9,9 +9,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Events from "./pages/Events.jsx";
-import AdminPage from "./admin/AdminPage.jsx";
 import EventManager from "./admin/event/EventManager.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
+import Profile from "./pages/Profile.jsx";
+
+import { AuthProvider } from "./AuthContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,16 +29,16 @@ const router = createBrowserRouter([
     element: <Events />,
   },
   {
-    path: "/admin/*",
-    element: <AdminPage />,
-  },
-  {
-    path: "/manage-events",
+    path: "/admin/events",
     element: <EventManager />,
   },
   {
     path: "/team",
     element: <TeamPage />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
   {
     path: "/",
@@ -46,6 +48,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
