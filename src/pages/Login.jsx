@@ -17,7 +17,7 @@ import "./styles/login.css";
 import { Button } from "react-bootstrap";
 
 function Login() {
-  const { isLoggedIn, login } = useContext(AuthContext);
+  const { isLoggedIn, login, logout } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   async function signIn(e, data) {
@@ -42,6 +42,10 @@ function Login() {
         localStorage.setItem("userId", response.data.data.id);
         localStorage.setItem("auth_token", response.data.token);
         localStorage.setItem("role", response.data.data.role);
+        localStorage.setItem(
+          "events",
+          JSON.stringify(response.data.data.events)
+        );
         login({
           email: email.toLowerCase(),
           username: response.data.data.name,
@@ -50,6 +54,7 @@ function Login() {
           gender: response.data.data.gender,
           token: response.data.token,
           userId: response.data.data.id,
+          events: response.data.data.events,
         });
       }
       console.log({ response });
@@ -59,16 +64,23 @@ function Login() {
       alert("Login unsuccessfull.❌");
     }
   }
+
+  function handleLogout(e) {
+    logout();
+  }
+
   return (
     <section className="login-section w-[100vw] h-[100vh] bg-green-1000 flex items-center justify-center">
       {isLoggedIn ? (
         <div className="flex flex-column items-center justify-center gap-5">
           <h1 className="text-white">You're Logged In</h1>
-          <Button>
-            <span className="text-3xl font-bold m-2">🪵Out</span>
+          <Button onClick={handleLogout}>
+            <span className="text-3xl font-bold m-2">LOG OUT</span>
           </Button>
           <Link to="/profile">
-            <span className="text-3xl font-bold m-2">Profile</span>
+            <Button variant="outline-success">
+              <span className="text-3xl font-bold m-2">View Profile</span>
+            </Button>
           </Link>
         </div>
       ) : (

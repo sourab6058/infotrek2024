@@ -2,8 +2,12 @@ import React from "react";
 import lightLogo from "../assets/infotreklightlogo.png";
 import darkLogo from "../assets/infotrekdarklogo.png";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+
+import { AuthContext } from "../AuthContext";
 
 export default function Nav({ dark }) {
+  const context = useContext(AuthContext);
   return (
     <nav
       className={`flex justify-between items-center p-3 ${
@@ -59,11 +63,11 @@ export default function Nav({ dark }) {
                 dark ? "text-white" : "text-green-1000"
               } font-bold m-0`}
             >
-              LOG IN
+              {context.isLoggedIn ? "LOG OUT" : "LOG IN"}
             </p>
           </div>
         </Link>
-        <Link className="no-underline text-center">
+        <Link className="no-underline text-center" to="/events">
           <div className="rounded-md py-2 px-3 bg-neon-100 hover:bg-neon-80">
             <p className="text-black font-semibold m-0">SEE EVENTS</p>
           </div>

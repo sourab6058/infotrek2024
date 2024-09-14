@@ -113,10 +113,12 @@ export default function Profile() {
       )
       .then((res) => {
         if (res.status === 200) {
+          console.log(res.data.data.img_url);
           let newContext = { ...curContext };
           delete newContext["login"];
           delete newContext["logout"];
           delete newContext["isLoggedIn"];
+          localStorage.setItem("imgUrl", res.data.data.img_url);
           context.login({ ...newContext, imgUrl: res.data.data.img_url });
         }
       });

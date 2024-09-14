@@ -1,58 +1,89 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { Badge, Col, Form, Row, Card, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Badge, Card, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
+import { useContext } from "react";
+
+import { AuthContext } from "../AuthContext";
+
+const SERVER_URL = import.meta.env.VITE_SERVER_BASE_URL;
+
+const token = localStorage.getItem("auth_token");
 
 function EventCard({ event }) {
   const [registrationsOpen, setRegistrationsOpen] = useState(false);
-  let teamInputRef = useRef(null);
+  const [registered, setRegistered] = useState(false);
+  const user = useContext(AuthContext);
   useEffect(() => {
     setRegistrationsOpen(new Date(event.date_to) >= new Date().getTime());
+    if (user.events.some((e) => e.event_id == event.id)) setRegistered(true);
+    console.log(user);
   }, [event]);
 
   function handleRegister(event, registrationsOpen) {
-    const teamName = teamInputRef.current.value;
     if (!registrationsOpen) {
       alert("Registrations are closed");
       return;
     }
-    const token = localStorage.getItem("auth_token");
-    if (event.category.toLowerCase() === "team") {
-      if (teamName.length === 0) return alert("Please Enter team name");
-      axios
-        .post(
-          "http://localhost:3000/api/event/register",
-          {
-            user_id: localStorage.getItem("userId"),
-            event_id: event.id,
-            team_name: teamName,
-            status: "registered",
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-        });
-    } else {
-      axios
-        .post(
-          "http://localhost:3000/api/event/register/",
-          {
-            user_id: localStorage.getItem("userId"),
-            event_id: event.id,
-            team_name: "ind",
-            status: "registered",
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-        });
-    }
+
+    axios
+      .post(
+        `${SERVER_URL}/api/event/register/`,
+        {
+          user_id: user.userId,
+          event_id: event.id,
+          team_name: "ind",
+          status: "registered",
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.status == 201)
+          alert("You have been successfully registerd for the event.✅");
+        let events = JSON.parse(localStorage.getItem("events"));
+        events = [...events, res.data];
+        user.setEvents(events);
+        localStorage.setItem("events", JSON.stringify(events));
+        setRegistered(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.response.status == 401)
+          alert("➕You have already registerd for this event.➕");
+        setRegistered(true);
+      });
+  }
+  function handleUnregister(event) {
+    axios
+      .post(
+        `${SERVER_URL}/api/event/unregister/`,
+        {
+          user_id: user.userId,
+          event_id: event.id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.status == 201)
+          alert("Unregsitered from the event successfully.✅");
+        let events = JSON.parse(localStorage.getItem("events"));
+        events = events.filter((e) => e.event_id != event.id);
+        user.setEvents(events);
+        localStorage.setItem("events", JSON.stringify(events));
+        setRegistered(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.response.status == 401)
+          alert("➕You have already unregisterd for this event.➕");
+        setRegistered(false);
+      });
   }
   return (
     <>
@@ -84,35 +115,28 @@ function EventCard({ event }) {
                 <span>{event.category}</span>
               </div>
             </div>
-            <div className="flex justify-center items-end">
-              <Button
-                disabled={new Date(event.date_to) < new Date().getTime()}
-                variant="primary"
-                onClick={() => handleRegister(event, registrationsOpen)}
-              >
-                Register Now!
-              </Button>
+            <div className="flex flex-column justify-end items-center">
+              {registered ? (
+                <Button
+                  className="min-w-64"
+                  disabled={new Date(event.date_to) < new Date().getTime()}
+                  variant="danger"
+                  onClick={() => handleUnregister(event)}
+                >
+                  <b>Unregister</b>
+                </Button>
+              ) : (
+                <Button
+                  className="min-w-64"
+                  disabled={new Date(event.date_to) < new Date().getTime()}
+                  variant="success"
+                  onClick={() => handleRegister(event, registrationsOpen)}
+                >
+                  <b>Register</b>
+                </Button>
+              )}
             </div>
           </div>
-          <Form key={uuidv4()}>
-            <Form.Group kye={uuidv4()} as={Row} className="mb-3 mt-2">
-              <Form.Label column sm="2">
-                Team
-              </Form.Label>
-              <Col>
-                <Form.Control
-                  disabled={event.category.toLowerCase() !== "team"}
-                  type="text"
-                  placeholder={
-                    event.category.toLowerCase() === "team"
-                      ? "Enter Team Name"
-                      : "Team Not Required"
-                  }
-                  ref={teamInputRef}
-                />
-              </Col>
-            </Form.Group>
-          </Form>
         </Card.Body>
       </Card>
     </>

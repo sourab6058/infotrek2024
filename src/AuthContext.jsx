@@ -12,6 +12,7 @@ function AuthProvider(props) {
   const [email, setEmail] = useState(null);
   const [imgUrl, setImgUrl] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("auth_token");
@@ -24,6 +25,7 @@ function AuthProvider(props) {
         dob: localStorage.getItem("dob"),
         imgUrl: localStorage.getItem("imgUrl"),
         userId: localStorage.getItem("userId"),
+        events: JSON.parse(localStorage.getItem("events")),
       });
     }
   }, []);
@@ -37,11 +39,13 @@ function AuthProvider(props) {
     setEmail(data.email);
     setImgUrl(data.imgUrl);
     setUserId(data.userId);
+    setEvents(data.events);
   };
 
   const logout = () => {
     setIsLoggedIn(false);
     setToken(null);
+    localStorage.clear();
   };
 
   const value = {
@@ -53,6 +57,8 @@ function AuthProvider(props) {
     imgUrl,
     userId,
     token,
+    events,
+    setEvents,
     login,
     logout,
   };
