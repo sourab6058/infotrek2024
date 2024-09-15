@@ -1,4 +1,10 @@
-import React, { useContext, useState, useReducer, useRef } from "react";
+import React, {
+  useContext,
+  useState,
+  useReducer,
+  useRef,
+  useEffect,
+} from "react";
 import Nav from "../components/Nav";
 import {
   Button,
@@ -12,6 +18,8 @@ import {
 import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import formatDateyyyyMMdd from "../../utils/formatDateyyyyMMdd";
+
+const SERVER_URL = import.meta.env.VITE_SERVER_BASE_URL;
 
 const initialProfile = {
   username: localStorage.getItem("name"),
@@ -30,10 +38,19 @@ export default function Profile() {
   const [editProfileEnable, setEditProfileEnable] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialProfile);
   const [file, setFile] = useState(null);
-  const canvasRef = useRef(null);
 
   const context = useContext(AuthContext);
-  console.log(context);
+  useEffect(() => {
+    let newState = { ...context };
+    delete newState["login"];
+    delete newState["logout"];
+    delete newState["token"];
+    delete newState["isLoggedIn"];
+    newState["id"] = newState["userId"];
+    delete newState["userId"];
+
+    dispatch({ data: newState });
+  }, []);
 
   function handleEditClick(currentContext, editProfileEnable) {
     if (editProfileEnable) {
@@ -43,6 +60,9 @@ export default function Profile() {
       delete newState["logout"];
       delete newState["token"];
       delete newState["isLoggedIn"];
+      newState["id"] = newState["userId"];
+      delete newState["userId"];
+      console.log(newState);
 
       dispatch({ data: newState });
     }
@@ -50,19 +70,19 @@ export default function Profile() {
   }
 
   function handleSaveChanges(state, token) {
-    const newState = { ...state };
+    let newState = { ...state };
+    newState["id"] = newState["userId"];
+    delete newState["userId"];
+    console.log(newState);
+    newState;
     if (newState.email === "" || newState.username === "") {
       return alert("Cannot submit empty fields.");
     }
     try {
       axios
-        .patch(
-          `http://localhost:3000/api/users/update/${newState.userId}`,
-          newState,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+        .patch(`${SERVER_URL}/api/users/update/${newState.userId}`, newState, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((res) => {
           if (res.status === 200) {
             const data = res.data.data;
@@ -106,11 +126,9 @@ export default function Profile() {
     form.append("file", file);
     console.log(file);
     axios
-      .patch(
-        `http://localhost:3000/api/users/uploadpic/${curContext.userId}`,
-        form,
-        { headers: { Authorization: `Bearer ${curContext.token}` } }
-      )
+      .patch(`${SERVER_URL}/api/users/uploadpic/${curContext.userId}`, form, {
+        headers: { Authorization: `Bearer ${curContext.token}` },
+      })
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.data.img_url);
@@ -126,7 +144,6 @@ export default function Profile() {
 
   return (
     <div className="bg-off-white min-h-[100vh]">
-      <canvas height="0" width="0" hidden ref={canvasRef} />
       <Nav />
       <Container className="mt-5">
         <Row>
@@ -142,7 +159,7 @@ export default function Profile() {
               <div
                 className="rounded"
                 style={{
-                  backgroundImage: `url(http://localhost:3000/imgs/${context.imgUrl})`,
+                  backgroundImage: `url(${SERVER_URL}/public/imgs/${context.imgUrl})`,
                   height: "250px",
                   width: "250px",
                   backgroundSize: "cover",
