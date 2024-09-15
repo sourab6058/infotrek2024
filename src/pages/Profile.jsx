@@ -19,7 +19,11 @@ import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import formatDateyyyyMMdd from "../../utils/formatDateyyyyMMdd";
 
-const SERVER_URL = import.meta.env.VITE_SERVER_BASE_URL;
+import {
+  updateProfileApi,
+  updateProfilePicApi,
+  profilePicApi,
+} from "../../api";
 
 const initialProfile = {
   username: localStorage.getItem("name"),
@@ -80,7 +84,7 @@ export default function Profile() {
     }
     try {
       axios
-        .patch(`${SERVER_URL}/api/users/update/${newState.userId}`, newState, {
+        .patch(`${updateProfileApi}/${newState.userId}`, newState, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -126,7 +130,7 @@ export default function Profile() {
     form.append("file", file);
     console.log(file);
     axios
-      .patch(`${SERVER_URL}/api/users/uploadpic/${curContext.userId}`, form, {
+      .patch(`${updateProfilePicApi}/${curContext.userId}`, form, {
         headers: { Authorization: `Bearer ${curContext.token}` },
       })
       .then((res) => {
@@ -159,7 +163,7 @@ export default function Profile() {
               <div
                 className="rounded"
                 style={{
-                  backgroundImage: `url(${SERVER_URL}/public/imgs/${context.imgUrl})`,
+                  backgroundImage: `url(${profilePicApi}/${context.imgUrl})`,
                   height: "250px",
                   width: "250px",
                   backgroundSize: "cover",

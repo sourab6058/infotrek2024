@@ -6,7 +6,7 @@ import { useContext } from "react";
 
 import { AuthContext } from "../AuthContext";
 
-const SERVER_URL = import.meta.env.VITE_SERVER_BASE_URL;
+import { eventRegister, eventUnregister } from "../../api";
 
 const token = localStorage.getItem("auth_token");
 
@@ -28,7 +28,7 @@ function EventCard({ event }) {
 
     axios
       .post(
-        `${SERVER_URL}/api/event/register/`,
+        eventRegister,
         {
           user_id: user.userId,
           event_id: event.id,
@@ -59,7 +59,7 @@ function EventCard({ event }) {
   function handleUnregister(event) {
     axios
       .post(
-        `${SERVER_URL}/api/event/unregister/`,
+        eventUnregister,
         {
           user_id: user.userId,
           event_id: event.id,

@@ -12,6 +12,8 @@ import sunrise from "../assets/sunrise.svg";
 
 import "./styles/register.css";
 
+import { registerApi } from "../../api";
+
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,16 +23,14 @@ function Register() {
     e.preventDefault();
     console.log(data);
     try {
-      axios
-        .post("http://localhost:3000/api/users/signup", data)
-        .then((response) => {
-          alert("Registration successful✅. Now Login Please. ");
-          setName("");
-          setEmail("");
-          setPassword("");
-          navigate("/login");
-          console.log({ response });
-        });
+      axios.post(registerApi, data).then((response) => {
+        alert("Registration successful✅. Now Login Please. ");
+        setName("");
+        setEmail("");
+        setPassword("");
+        navigate("/login");
+        console.log({ response });
+      });
     } catch (err) {
       console.log(err);
 

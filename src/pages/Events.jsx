@@ -5,20 +5,16 @@ import EventCard from "../components/EventCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Nav from "../components/Nav";
-import TeamOptionsModal from "../components/TeamOptionsModal";
+
+import { eventApi } from "../../api";
 
 function Events() {
   const [events, setEvents] = useState(null);
-  const [isTeamOptionsModalOpen, setIsTeamOptionsModalOpen] = useState(false);
   const [eventId, setEventId] = useState(null);
-  const [teams, setTeams] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:3000/api/event").then((res) => {
+    axios.get(eventApi).then((res) => {
       setEvents(res.data);
       console.log(res);
-    });
-    axios.get("http://localhost:3000/api/teams").then((res) => {
-      setTeams(res.data);
     });
   }, []);
   return (
@@ -65,13 +61,6 @@ function Events() {
               ))
           )}
       </Container>
-      <TeamOptionsModal
-        eventId={eventId}
-        events={events}
-        isTeamOptionsModalOpen={isTeamOptionsModalOpen}
-        setIsTeamOptionsModalOpen={setIsTeamOptionsModalOpen}
-        teams={teams}
-      />
     </>
   );
 }

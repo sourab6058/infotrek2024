@@ -4,6 +4,8 @@ import { Button, Dropdown, Form, Modal } from "react-bootstrap";
 
 import formatDateyyyyMMdd from "../../../utils/formatDateyyyyMMdd";
 
+import { eventApi } from "../../../api";
+
 export default function EditEventModal({
   isEditEventModalOpen,
   setIsEditEventModalOpen,
@@ -86,7 +88,7 @@ export default function EditEventModal({
       return;
     }
     axios
-      .patch(`http://localhost:3000/api/event/${id}`, data, {
+      .patch(`${eventApi}/${id}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

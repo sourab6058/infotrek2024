@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 import { Button, Dropdown, Form, Modal } from "react-bootstrap";
 
+import { eventApi } from "../../../api";
+
 export default function AddEventModal({
   isEventModalOpen,
   setIsEventModalOpen,
@@ -61,7 +63,7 @@ export default function AddEventModal({
       return;
     }
     axios
-      .post("http://localhost:3000/api/event", data, {
+      .post(eventApi, data, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

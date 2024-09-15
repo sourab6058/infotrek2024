@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import EditEventModal from "./EditEventModal";
 
+import { eventApi } from "../../../api";
+
 export default function EventsTable() {
   const [data, setData] = useState([]);
   const [isEditEventModalOpen, setIsEditEventModalOpen] = useState(false);
@@ -28,7 +30,7 @@ export default function EventsTable() {
 
     if (confirmAction) {
       axios
-        .delete(`http://localhost:3000/api/event/${id}`, {
+        .delete(`${eventApi}/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -40,7 +42,7 @@ export default function EventsTable() {
   }
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/event").then((res) => {
+    axios.get(`${SERVER_BASE_URL}/api/event`).then((res) => {
       if (res.status === 200) {
         setData(res.data);
       }

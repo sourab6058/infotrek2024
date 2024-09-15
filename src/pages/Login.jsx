@@ -16,6 +16,8 @@ import sunrise from "../assets/sunrise.svg";
 import "./styles/login.css";
 import { Button } from "react-bootstrap";
 
+import { loginApi } from "../../api";
+
 function Login() {
   const { isLoggedIn, login, logout } = useContext(AuthContext);
   const [email, setEmail] = useState("");
@@ -24,10 +26,7 @@ function Login() {
     e.preventDefault();
     console.log(data);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/users/login",
-        data
-      );
+      const response = await axios.post(loginApi, data);
       console.log(response, response.status);
       if (response.status === 200) {
         const formattedDob = formatDateyyyyMMdd(response.data.data.dob);
