@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Badge, Card, Button } from "react-bootstrap";
+import { Badge, Card, Button, Image } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { useContext } from "react";
 
@@ -15,12 +15,13 @@ function EventCard({ event }) {
   const [registered, setRegistered] = useState(false);
   const user = useContext(AuthContext);
   useEffect(() => {
-    setRegistrationsOpen(new Date(event.date_to) >= new Date().getTime());
+    setRegistrationsOpen(new Date(event.dateTo) >= new Date().getTime());
     if (user.events.some((e) => e.event_id == event.id)) setRegistered(true);
     console.log(user);
   }, [event]);
 
   function handleRegister(event, registrationsOpen) {
+    console.log(event.id);
     if (!registrationsOpen) {
       alert("Registrations are closed");
       return;
@@ -88,6 +89,12 @@ function EventCard({ event }) {
   return (
     <>
       <Card style={{ margin: "1rem" }} key={uuidv4()}>
+        <Image
+          src={event.image_url || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
+          className="img-fluid w-100"
+          alt={event.name}
+          style={{ maxHeight: "400px", objectFit: "cover" }} // Limit the height and ensure image covers space nicely
+        />
         <Card.Body>
           <div className="flex justify-between items-center">
             <Card.Title>
@@ -119,7 +126,10 @@ function EventCard({ event }) {
               {registered ? (
                 <Button
                   className="min-w-64"
-                  disabled={new Date(event.date_to) < new Date().getTime()}
+                  disabled={
+                    new Date(event.date_to) < new Date().getTime() ||
+                    !user.isLoggedIn
+                  }
                   variant="danger"
                   onClick={() => handleUnregister(event)}
                 >
@@ -128,7 +138,10 @@ function EventCard({ event }) {
               ) : (
                 <Button
                   className="min-w-64"
-                  disabled={new Date(event.date_to) < new Date().getTime()}
+                  disabled={
+                    new Date(event.date_to) < new Date().getTime() ||
+                    !user.isLoggedIn
+                  }
                   variant="success"
                   onClick={() => handleRegister(event, registrationsOpen)}
                 >

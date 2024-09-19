@@ -18,9 +18,12 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   function handleSubmit(e, data) {
     e.preventDefault();
+    setLoading(true);
     console.log(data);
     try {
       axios.post(registerApi, data).then((response) => {
@@ -80,7 +83,7 @@ function Register() {
           }
           onClick={(e) => handleSubmit(e, { name, email, password })}
         >
-          REGISTER
+          {loading ? <div className="loader"></div> : "REGISTER"}
         </button>
         <div className="mt-2 text-xl">
           Have an Account?

@@ -1,316 +1,312 @@
-import React, {
-  useContext,
-  useState,
-  useReducer,
-  useRef,
-  useEffect,
-} from "react";
+import { useState, useContext } from "react";
 import Nav from "../components/Nav";
-import {
-  Button,
-  Col,
-  Container,
-  Dropdown,
-  Form,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { FiMail } from "react-icons/fi"; // Import email icon from react-icons library
 import { AuthContext } from "../AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import axios from "axios";
-import formatDateyyyyMMdd from "../../utils/formatDateyyyyMMdd";
 
-import {
-  updateProfileApi,
-  updateProfilePicApi,
-  profilePicApi,
-} from "../../api";
+import { updateProfileApi } from "../../api";
 
-const initialProfile = {
-  username: localStorage.getItem("name"),
-  email: localStorage.getItem("email"),
-  gender: localStorage.getItem("gender"),
-  dob: localStorage.getItem("dob"),
-  imgUrl: localStorage.getItem("imgUrl"),
-  userId: localStorage.getItem("userId"),
-};
-
-function reducer(_, action) {
-  return action.data;
-}
-
-export default function Profile() {
-  const [editProfileEnable, setEditProfileEnable] = useState(false);
-  const [state, dispatch] = useReducer(reducer, initialProfile);
-  const [file, setFile] = useState(null);
-
+const Profile = () => {
   const context = useContext(AuthContext);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState();
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState(0);
+  const [field, setField] = useState("");
+  const [dob, setDob] = useState("mm/dd/yyyy");
+
   useEffect(() => {
-    let newState = { ...context };
-    delete newState["login"];
-    delete newState["logout"];
-    delete newState["token"];
-    delete newState["isLoggedIn"];
-    newState["id"] = newState["userId"];
-    delete newState["userId"];
+    console.log("USERNAME ", context?.username);
+    setFirstName(context?.username?.split(" ")[0]);
+    setLastName(context?.username?.split(" ")[1]);
+    setGender(context?.gender);
+    setDob(context?.dob?.split("T")[0]);
+  }, [context]);
 
-    dispatch({ data: newState });
-  }, []);
+  const navigate = useNavigate();
 
-  function handleEditClick(currentContext, editProfileEnable) {
-    if (editProfileEnable) {
-      //when clicked on cancel edit
-      let newState = { ...currentContext };
-      delete newState["login"];
-      delete newState["logout"];
-      delete newState["token"];
-      delete newState["isLoggedIn"];
-      newState["id"] = newState["userId"];
-      delete newState["userId"];
-      console.log(newState);
+  const handleSubmit = (e, context, dob, gender) => {
+    e.preventDefault();
+    alert("Profile updated successfully!");
+    const data = {
+      username: firstName + " " + lastName,
+      email: context?.email,
+      dob: dob,
+      gender: gender,
+    };
 
-      dispatch({ data: newState });
+    axios.put(`${updateProfileApi}/${context.userId}`, data).then((res) => {
+      console.log(res.data.data);
+
+      const data = {
+        email: res.data.data.email.toLowerCase(),
+        username: res.data.data.name,
+        dob: res.data.data.dob,
+        imgUrl: res.data.data.img_url,
+        gender: res.data.data.gender,
+        token: context.token,
+        userId: res.data.data.id,
+        events: context.events,
+      };
+      context.login(data);
+      setFirstName(res.data.data.name.split(" ")[0]);
+      setLastName(res.data.data.name.split(" ")[1]);
+      setDob(res.data.data.dob.split("T")[0]);
+      setGender(res.data.data.gender);
+      localStorage.setItem("name", res.data.data.name);
+      localStorage.setItem("dob", res.data.data.dob);
+      localStorage.setItem("gender", res.data.data.gender);
+    });
+
+    setIsEditing(false); // Disable editing mode after submission
+  };
+
+  function calculateAge(dob) {
+    if (!dob) {
+      setAge(0);
+      return;
     }
-    setEditProfileEnable(!editProfileEnable);
+    if (dob == "mm/dd/yyyy") {
+      setAge(0);
+      return;
+    }
+    console.log("dob", dob);
+    const [year, month, day] = dob.split("-").map(Number);
+
+    const birthDate = new Date(year, month - 1, day);
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    setAge(age);
   }
 
-  function handleSaveChanges(state, token) {
-    let newState = { ...state };
-    newState["id"] = newState["userId"];
-    delete newState["userId"];
-    console.log(newState);
-    newState;
-    if (newState.email === "" || newState.username === "") {
-      return alert("Cannot submit empty fields.");
-    }
-    try {
-      axios
-        .patch(`${updateProfileApi}/${newState.userId}`, newState, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            const data = res.data.data;
+  const handleLogout = (e) => {
+    e.preventDefault();
+    alert("You've been logged out successfully!");
+    context.logout();
+    navigate("/");
+  };
 
-            const formattedDate = formatDateyyyyMMdd(data.dob);
-            console.log("success", data, formattedDate);
-            context.login({
-              ...data,
-              username: data.name,
-              imgUrl: data.img_url,
-              userId: data.id,
-              dob: formattedDate,
-              token: context.token,
-            });
-            alert("Changes saved successfully.✅");
-            localStorage.setItem("email", data.email.toLowerCase());
-            localStorage.setItem("authorized", "true");
-            localStorage.setItem("name", data.name);
-            localStorage.setItem("dob", formattedDate);
-            localStorage.setItem("imgUrl", data.img_url);
-            localStorage.setItem("gender", data.gender);
-            localStorage.setItem("userId", data.id);
-            localStorage.setItem("auth_token", token);
-            localStorage.setItem("role", data.role);
-          } else {
-            return alert("Cannot update the profile. Something went wrong.");
-          }
-        });
-    } catch (e) {
-      console.error(e);
-      return alert("Username or Email is already in use.");
+  const { status } = context;
+  useEffect(() => {
+    if (status === false) {
+      navigate("/");
     }
-  }
-
-  async function handlePictureSave(file, curContext) {
-    if (!file) return alert("No File found.");
-    if (file.size > 100 * 1024) {
-      return alert("Size of the file must not exceed 100KBs.");
-    }
-    const form = new FormData();
-    form.append("file", file);
-    console.log(file);
-    axios
-      .patch(`${updateProfilePicApi}/${curContext.userId}`, form, {
-        headers: { Authorization: `Bearer ${curContext.token}` },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data.data.img_url);
-          let newContext = { ...curContext };
-          delete newContext["login"];
-          delete newContext["logout"];
-          delete newContext["isLoggedIn"];
-          localStorage.setItem("imgUrl", res.data.data.img_url);
-          context.login({ ...newContext, imgUrl: res.data.data.img_url });
-        }
-      });
-  }
+    calculateAge(dob);
+  }, [status, dob]);
 
   return (
-    <div className="bg-off-white min-h-[100vh]">
+    <div className="bg-gray-100 min-h-screen">
       <Nav />
-      <Container className="mt-5">
-        <Row>
-          <Col>
-            <div className="rounded p-2 text-3xl font-bold m-2 bg-white shadow-md min-h-[50px]">
-              User Profile
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="rounded p-2 text-3xl font-bold m-2 bg-white shadow-md min-h-[50px] flex flex-column items-center justify-center gap-2">
-              <div
-                className="rounded"
-                style={{
-                  backgroundImage: `url(${profilePicApi}/${context.imgUrl})`,
-                  height: "250px",
-                  width: "250px",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
-              <div className="flex items-center justify-between gap-5">
-                <div className="p-1 text-2xl font-bold">{context.username}</div>
-                <InputGroup>
-                  <Form.Control
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setFile(e.target.files[0])}
-                  />
-
-                  <Button
-                    disabled={!context.isLoggedIn}
-                    variant="primary"
-                    onClick={() => handlePictureSave(file, context)}
-                  >
-                    <span className="text-xl font-bold">💾 Save</span>
-                  </Button>
-                  <Form.Text muted>
-                    <span className="text-sm font-semibold">
-                      The size of the picture must not exceed 100KBs.
-                    </span>
-                  </Form.Text>
-                </InputGroup>
+      <div className="max-w-5xl mx-auto px-4 py-12">
+        {/* Top section with user information */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <div className="flex items-center justify-center px-10">
+            <div className="flex items-center">
+              <div className="h-20 w-20 flex items-center justify-center rounded-full text-white text-4xl font-bold bg-green-500">
+                {context?.username?.charAt(0).toUpperCase()}
+              </div>
+              <div className="ml-3">
+                <p className="font-bold text-2xl text-gray-900">
+                  {context?.username}
+                </p>
+                <p className="text-gray-600">{context?.email}</p>
               </div>
             </div>
-          </Col>
-          <Col>
-            <div className="rounded p-2 text-2xl font-bold m-2 bg-white shadow-md min-h-[50px]">
-              <div className="flex items-center justify-between mb-2">
-                <div>User Info</div>
-                <Button disabled={!context.isLoggedIn}>
-                  <span
-                    className="text-xl"
-                    onClick={() => handleEditClick(context, editProfileEnable)}
-                  >
-                    {editProfileEnable ? "↩️Cancel Edit" : "✏️ Edit Info"}
-                  </span>
-                </Button>
-              </div>
-              <Row className="mb-2">
-                <Col className="text-slate-500">Username</Col>
-                <Col>
-                  <Form.Control
-                    className="font-bold"
-                    value={state.username}
-                    placeholder={
-                      !context.isLoggedIn ? "Not Logged In" : "New Username"
-                    }
-                    onChange={(e) =>
-                      dispatch({ data: { ...state, username: e.target.value } })
-                    }
-                    disabled={!editProfileEnable}
-                  />
-                </Col>
-              </Row>
-              <Row className="mb-2">
-                <Col className="text-slate-500">Email</Col>
-                <Col>
-                  <Form.Control
-                    type="email"
-                    placeholder={
-                      !context.isLoggedIn ? "Not Logged In" : "New Email"
-                    }
-                    value={state.email}
-                    onChange={(e) =>
-                      dispatch({ data: { ...state, email: e.target.value } })
-                    }
-                    disabled={!editProfileEnable}
-                  />
-                </Col>
-              </Row>
-              <Row className="mb-2">
-                <Col className="text-slate-500">Dob</Col>
-                <Col>
-                  <Form.Control
-                    type="date"
-                    value={state.dob}
-                    onChange={(e) =>
-                      dispatch({ data: { ...state, dob: e.target.value } })
-                    }
-                    disabled={!editProfileEnable}
-                  />
-                </Col>
-              </Row>
-              <Row className="mb-2">
-                <Col className="text-slate-500">Gender</Col>
-                <Col>
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant="primary"
-                      id="dropdown-basic"
-                      disabled={!editProfileEnable}
-                    >
-                      {state.gender === "M"
-                        ? "Male 👨🏿‍🦱"
-                        : state.gender === "F"
-                        ? "Female 👩🏿‍🦰"
-                        : "Others 🌈"}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={(e) =>
-                          dispatch({ data: { ...state, gender: "M" } })
-                        }
-                      >
-                        Male 👨🏿‍🦱
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={(e) =>
-                          dispatch({ data: { ...state, gender: "F" } })
-                        }
-                      >
-                        Female 👩🏿‍🦰
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={(e) =>
-                          dispatch({ data: { ...state, gender: "O" } })
-                        }
-                      >
-                        Others 🌈
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-              </Row>
-              <Row className="mb-2">
-                <Col></Col>
-                <Col>
-                  <Button
-                    disabled={!editProfileEnable}
-                    variant="success"
-                    onClick={() => handleSaveChanges(state, context.token)}
-                  >
-                    <span className="text-2xl font-bold">🚀Save Changes</span>
-                  </Button>
-                </Col>
-              </Row>
+            <div className="ml-auto">
+              {!isEditing ? (
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+                >
+                  Edit
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  onClick={(e) => handleSubmit(e, context, dob, gender)}
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-200"
+                >
+                  Save
+                </button>
+              )}
             </div>
-          </Col>
-        </Row>
-      </Container>
+          </div>
+        </div>
+
+        {/* Form section with user details */}
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-lg shadow-lg p-8"
+        >
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            {/* First Name */}
+            <div>
+              <label
+                htmlFor="firstName"
+                className="block text-gray-700 font-bold mb-2"
+              >
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                readOnly={!isEditing}
+                className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                  isEditing ? "border-gray-300" : "border-transparent"
+                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                placeholder="First Name"
+              />
+            </div>
+
+            {/* Last Name */}
+            <div>
+              <label
+                htmlFor="lastName"
+                className="block text-gray-700 font-bold mb-2"
+              >
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                readOnly={!isEditing}
+                className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                  isEditing ? "border-gray-300" : "border-transparent"
+                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                placeholder="Last Name"
+              />
+            </div>
+          </div>
+
+          {/* Gender and Age */}
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <label
+                htmlFor="gender"
+                className="block text-gray-700 font-bold mb-2"
+              >
+                Gender
+              </label>
+              <input
+                type="text"
+                id="gender"
+                name="gender"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                readOnly={!isEditing}
+                className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                  isEditing ? "border-gray-300" : "border-transparent"
+                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                placeholder="Gender"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="age"
+                className="block text-gray-700 font-bold mb-2"
+              >
+                Age
+              </label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                value={age}
+                readOnly={false}
+                className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                  isEditing ? "border-gray-300" : "border-transparent"
+                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                placeholder="Age"
+                disabled={true}
+              />
+            </div>
+          </div>
+
+          {/* Field and Date of Birth */}
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <label
+                htmlFor="field"
+                className="block text-gray-700 font-bold mb-2"
+              >
+                Field
+              </label>
+              <input
+                type="text"
+                id="field"
+                name="field"
+                value={field}
+                onChange={(e) => setField(e.target.value)}
+                readOnly={!isEditing}
+                className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                  isEditing ? "border-gray-300" : "border-transparent"
+                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                placeholder="Field"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="dob"
+                className="block text-gray-700 font-bold mb-2"
+              >
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                id="dob"
+                name="dob"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+                readOnly={!isEditing}
+                className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                  isEditing ? "border-gray-300" : "border-transparent"
+                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                placeholder="Date of Birth"
+              />
+            </div>
+          </div>
+
+          {/* Email icon and email */}
+          <div className="flex items-center mb-6">
+            <FiMail className="text-2xl text-gray-700 mr-2" />
+            <p className="text-gray-700">{context.email}</p>
+          </div>
+
+          {/* Logout button */}
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200"
+            >
+              Logout
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
-}
+};
+
+export default Profile;

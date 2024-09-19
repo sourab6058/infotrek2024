@@ -14,11 +14,16 @@ import TeamPage from "./pages/TeamPage.jsx";
 import Profile from "./pages/Profile.jsx";
 
 import { AuthProvider } from "./AuthContext.jsx";
+import About from "./pages/About.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/about",
+    element: <About />,
   },
   {
     path: "/register",

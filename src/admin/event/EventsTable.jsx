@@ -42,7 +42,7 @@ export default function EventsTable() {
   }
 
   useEffect(() => {
-    axios.get(`${SERVER_BASE_URL}/api/event`).then((res) => {
+    axios.get(`${eventApi}`).then((res) => {
       if (res.status === 200) {
         setData(res.data);
       }

@@ -31,6 +31,7 @@ function AuthProvider(props) {
   }, []);
 
   const login = (data) => {
+    console.log("REq Incomeinf", data);
     setIsLoggedIn(true);
     setToken(data.token);
     setUsername(data.username);

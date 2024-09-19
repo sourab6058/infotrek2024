@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "../AuthContext";
 import formatDateyyyyMMdd from "../../utils/formatDateyyyyMMdd";
@@ -22,15 +22,25 @@ function Login() {
   const { isLoggedIn, login, logout } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
+
   async function signIn(e, data) {
     e.preventDefault();
+    setLoading(true);
     console.log(data);
     try {
       const response = await axios.post(loginApi, data);
       console.log(response, response.status);
       if (response.status === 200) {
         const formattedDob = formatDateyyyyMMdd(response.data.data.dob);
-        console.log(response.data);
+        console.log("HHHHHH", response.data);
         alert("You're successfully logged in.✅");
         localStorage.setItem("email", email.toLowerCase());
         localStorage.setItem("authorized", "true");
@@ -113,7 +123,7 @@ function Login() {
             }
             onClick={(e) => signIn(e, { email, password })}
           >
-            LOG IN
+            {loading ? <div className="loader"></div> : "LOGIN"}
           </button>
           <div className="mt-2 text-xl">
             New?

@@ -1,5 +1,5 @@
-// const baseURL = "https://backend.infotrek24.in";
-const baseURL = "http://localhost:3000";
+const baseURL = "https://backend.infotrek24.in";
+// const baseURL = "http://localhost:3000";
 
 export const loginApi = `${baseURL}/api/users/login`;
 export const registerApi = `${baseURL}/api/users/signup`;
