@@ -1,6 +1,6 @@
-const baseURL = "https://backend.infotrek24.in";
-// const baseURL = "http://localhost:3000";
-
+// const baseURL = "https://backend.infotrek24.in";
+const baseURL = "http://localhost:3000";
+const ruleBookPdf = "rulebook.pdf";
 export const loginApi = `${baseURL}/api/users/login`;
 export const registerApi = `${baseURL}/api/users/signup`;
 export const updateProfileApi = `${baseURL}/api/users/update`;
@@ -9,3 +9,4 @@ export const profilePicApi = `${baseURL}/public/imgs`;
 export const eventApi = `${baseURL}/api/event`;
 export const eventRegister = `${baseURL}/api/event/register`;
 export const eventUnregister = `${baseURL}/api/event/unregister`;
+export const ruleBook = `${baseURL}/public/pdfs/${ruleBookPdf}`;

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
 
@@ -13,12 +13,20 @@ import sunrise from "../assets/sunrise.svg";
 import "./styles/register.css";
 
 import { registerApi } from "../../api";
+import { AuthContext } from "../AuthContext";
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { isLoggedIn } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
 
   const navigate = useNavigate();
   function handleSubmit(e, data) {
@@ -41,11 +49,13 @@ function Register() {
     }
   }
   return (
-    <section className="login-section w-[100vw] h-[100vh] bg-green-1000 flex items-center justify-center">
-      <div className="flex flex-column items-center justify-center text-off-white p-5 max-w-[45vw]">
-        <h2 className="text-4xl font-black">INFOTREK'24</h2>
-        <h1 className="text-center text-6xl font-black">GET STARTED</h1>
-        <p className="text-xl text-center mt-3">
+    <section className="login-section flex items-center justify-center min-h-screen bg-green-1000">
+      <div className="flex flex-col items-center justify-center text-off-white p-5 max-w-[90vw] sm:max-w-[60vw] lg:max-w-[45vw]">
+        <h2 className="text-4xl sm:text-5xl font-black">INFOTREK'24</h2>
+        <h1 className="text-6xl sm:text-7xl font-black mt-6 text-center">
+          GET STARTED
+        </h1>
+        <p className="text-xl sm:text-2xl text-center mt-3">
           Embark on a digital journey with us. Explore, learn, and connect at
           our exciting online events.
         </p>

@@ -16,9 +16,10 @@ function EventCard({ event }) {
   const user = useContext(AuthContext);
   useEffect(() => {
     setRegistrationsOpen(new Date(event.dateTo) >= new Date().getTime());
-    if (user.events.some((e) => e.event_id == event.id)) setRegistered(true);
+    if (user?.events?.some((e) => e?.event_id == event?.id))
+      setRegistered(true);
     console.log(user);
-  }, [event]);
+  }, [event, user]);
 
   function handleRegister(event, registrationsOpen) {
     console.log(event.id);
@@ -26,7 +27,12 @@ function EventCard({ event }) {
       alert("Registrations are closed");
       return;
     }
-
+    // console.log("API", eventRegister, {
+    //   user_id: user.userId,
+    //   event_id: event.id,
+    //   team_name: "ind",
+    //   status: "registered",
+    // });
     axios
       .post(
         eventRegister,
@@ -42,13 +48,14 @@ function EventCard({ event }) {
       )
       .then((res) => {
         console.log(res);
-        if (res.status == 201)
+        if (res.status == 201) {
           alert("You have been successfully registerd for the event.✅");
-        let events = JSON.parse(localStorage.getItem("events"));
-        events = [...events, res.data];
-        user.setEvents(events);
-        localStorage.setItem("events", JSON.stringify(events));
-        setRegistered(true);
+          let events = JSON.parse(localStorage.getItem("events"));
+          events = [...events, res.data];
+          user.setEvents(events);
+          localStorage.setItem("events", JSON.stringify(events));
+          setRegistered(true);
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -90,7 +97,7 @@ function EventCard({ event }) {
     <>
       <Card style={{ margin: "1rem" }} key={uuidv4()}>
         <Image
-          src={event.image_url || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
+          src={event.img || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
           className="img-fluid w-100"
           alt={event.name}
           style={{ maxHeight: "400px", objectFit: "cover" }} // Limit the height and ensure image covers space nicely
@@ -118,7 +125,7 @@ function EventCard({ event }) {
               </div>
               <div className="flex flex-column gap-1">
                 <span>{event.location}</span>
-                <span>{new Date(event.date_to).toLocaleDateString()}</span>
+                <span>{new Date(event.dateTo).toLocaleDateString()}</span>
                 <span>{event.category}</span>
               </div>
             </div>

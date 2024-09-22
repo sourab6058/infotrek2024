@@ -3,10 +3,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import EventCard from "../components/EventCard";
 import Nav from "../components/Nav";
+import { images } from "../assets/imgs";
 const events = [
   {
     id: "ccb8efb0-04d1-4da9-92fb-964181f73df5",
     name: "Algorithmia",
+    img: images.CssBattle,
     description: "It is a fun interview event",
     dateFrom: "2024-06-13",
     dateTo: "2024-11-22",

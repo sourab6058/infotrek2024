@@ -10,10 +10,11 @@
   box-sizing: border-box;
 }
 :root {
-  --green: #122315;
-  --off-white: #f3ede4;
+  --green: rgb(18, 35, 21);
+  --temp: rgb(18, 35, 21);
+  --off-white: rgb(243, 237, 228);
   --deacon: Deacon, sans-serif;
-  --neon-100: #55dd4a;
+  --neon-100: rgb(85, 221, 74);
   --graphik: Graphik, sans-serif;
   --neon-80: #77e46e;
   --neon-130: #3b9b34;

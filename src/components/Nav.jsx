@@ -3,6 +3,7 @@ import lightLogo from "../assets/infotreklightlogo.png";
 import darkLogo from "../assets/infotrekdarklogo.png";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
+import { ruleBook } from "../../api";
 
 export default function Nav({ dark }) {
   const context = useContext(AuthContext);
@@ -50,7 +51,7 @@ export default function Nav({ dark }) {
           isOpen ? "flex" : "hidden"
         } md:flex`}
       >
-        <ol className="font-bold flex flex-col md:flex-row justify-between items-center md:min-w-[240px]">
+        <ol className="font-bold flex flex-col md:flex-row justify-between items-center md:min-w-[360px]">
           <li>
             <Link
               to="/"
@@ -79,6 +80,17 @@ export default function Nav({ dark }) {
               } `}
             >
               Team
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={ruleBook}
+              className={`no-underline ${
+                dark ? "text-white nav-link-hover" : "text-green-1000"
+              } `}
+              target="_blank"
+            >
+              Rule Book
             </Link>
           </li>
         </ol>

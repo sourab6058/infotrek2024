@@ -79,99 +79,77 @@ function Login() {
   }
 
   return (
-    <section className="login-section w-[100vw] h-[100vh] bg-green-1000 flex items-center justify-center">
-      {isLoggedIn ? (
-        <div className="flex flex-column items-center justify-center gap-5">
-          <h1 className="text-white">You're Logged In</h1>
-          <Button onClick={handleLogout}>
-            <span className="text-3xl font-bold m-2">LOG OUT</span>
-          </Button>
-          <Link to="/profile">
-            <Button variant="outline-success">
-              <span className="text-3xl font-bold m-2">View Profile</span>
-            </Button>
+    <section className="login-section flex items-center justify-center min-h-screen bg-green-1000">
+      <div className="flex flex-col items-center justify-center text-off-white p-5 max-w-[90vw] sm:max-w-[60vw] lg:max-w-[45vw]">
+        <h2 className="text-4xl sm:text-5xl font-black">INFOTREK'24</h2>
+        <h1 className="text-6xl sm:text-7xl font-black mt-3 text-center">
+          GET STARTED
+        </h1>
+        <p className="text-xl sm:text-2xl text-center mt-3">
+          Embark on a digital journey with us. Explore, learn, and connect at
+          our exciting online events.
+        </p>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
+        />
+        <button
+          disabled={email.length === 0 || password.length === 0}
+          className={
+            email.length === 0 || password.length === 0
+              ? "p-2 w-100 rounded mt-3 text-2xl font-semibold border"
+              : "p-2 w-100 rounded mt-3 text-2xl font-semibold text-green-1000 bg-neon-80 border"
+          }
+          onClick={(e) => signIn(e, { email, password })}
+        >
+          {loading ? <div className="loader"></div> : "LOGIN"}
+        </button>
+        <div className="mt-2 text-xl">
+          New?
+          <Link
+            className="text-neon-100 ml-2 no-underline hover:text-neon-80"
+            to="/register"
+          >
+            Register
           </Link>
         </div>
-      ) : (
-        <div className="flex flex-column items-center justify-center text-off-white p-5 max-w-[45vw] z-10">
-          <h2 className="text-4xl font-black">INFOTREK'24</h2>
-          <h1 className="text-center text-6xl font-black">GET STARTED</h1>
-          <p className="text-xl text-center mt-3">
-            Embark on a digital journey with us. Explore, learn, and connect at
-            our exciting online events.
-          </p>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
-          />
-          <button
-            disabled={email.length === 0 || password.length === 0}
-            className={
-              email.length === 0 || password.length === 0
-                ? "p-2 w-100 rounded mt-3 text-2xl font-semibold border"
-                : "p-2 w-100 rounded mt-3 text-2xl font-semibold text-green-1000 bg-neon-80 border"
-            }
-            onClick={(e) => signIn(e, { email, password })}
-          >
-            {loading ? <div className="loader"></div> : "LOGIN"}
-          </button>
-          <div className="mt-2 text-xl">
-            New?
-            <Link
-              className="text-neon-100 ml-2 no-underline hover:text-neon-80"
-              to="/register"
-            >
-              Register
-            </Link>
-          </div>
-          <img
-            src={logs}
-            alt="img-1"
-            key={uuid()}
-            className="random-img img-1"
-          />
-          <img
-            src={hexa}
-            alt="img-3"
-            key={uuid()}
-            className="random-img img-3"
-          />
-          <img
-            src={boatload}
-            alt="img-2"
-            key={uuid()}
-            className="random-img img-2"
-          />
-          <img
-            src={deercliff}
-            alt="img-4"
-            key={uuid()}
-            className="random-img img-4"
-          />
-          <img
-            src={semicircle}
-            alt="img-5"
-            key={uuid()}
-            className="random-img img-5"
-          />
-          <img
-            src={sunrise}
-            alt="img-6"
-            key={uuid()}
-            className="random-img img-6"
-          />
-        </div>
-      )}
+        <img src={logs} alt="img-1" key={uuid()} className="random-img img-1" />
+        <img src={hexa} alt="img-3" key={uuid()} className="random-img img-3" />
+        <img
+          src={boatload}
+          alt="img-2"
+          key={uuid()}
+          className="random-img img-2"
+        />
+        <img
+          src={deercliff}
+          alt="img-4"
+          key={uuid()}
+          className="random-img img-4"
+        />
+        <img
+          src={semicircle}
+          alt="img-5"
+          key={uuid()}
+          className="random-img img-5"
+        />
+        <img
+          src={sunrise}
+          alt="img-6"
+          key={uuid()}
+          className="random-img img-6"
+        />
+      </div>
     </section>
   );
 }

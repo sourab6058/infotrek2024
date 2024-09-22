@@ -41,3 +41,36 @@
   left: 120px;
   transform: rotate(25deg);
 }
+
+@media only screen and (max-width: 768px) {
+  .img-1,
+  .img-2,
+  .img-3,
+  .img-4,
+  .img-5,
+  .img-6 {
+    height: 0px;
+    width: 0px;
+    visibility: hidden;
+  }
+}
+
+/* styles/login.css */
+.loader {
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  margin: auto;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

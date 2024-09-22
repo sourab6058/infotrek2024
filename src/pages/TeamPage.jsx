@@ -1,5 +1,5 @@
 import { motion, useTransform, useScroll } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Nav from "../components/Nav";
 
 const TeamPage = () => {

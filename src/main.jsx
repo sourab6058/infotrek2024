@@ -10,8 +10,9 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Events from "./pages/Events.jsx";
 import EventManager from "./admin/event/EventManager.jsx";
-import TeamPage from "./pages/TeamPage.jsx";
+import TeamPages from "./pages/TeamPages.jsx";
 import Profile from "./pages/Profile.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 import { AuthProvider } from "./AuthContext.jsx";
 import About from "./pages/About.jsx";
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/team",
-    element: <TeamPage />,
+    element: <TeamPages />,
   },
   {
     path: "/profile",
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
