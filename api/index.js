@@ -1,4 +1,4 @@
-const baseURL = "https://backend.infotrek24.in";
+const baseURL = "https://backend.infotrek24.tech";
 // const baseURL = "http://localhost:3000";
 const ruleBookPdf = "rulebook.pdf";
 export const loginApi = `${baseURL}/api/users/login`;
