@@ -14,15 +14,14 @@ function EventCard({ event }) {
   const [registrationsOpen, setRegistrationsOpen] = useState(false);
   const [registered, setRegistered] = useState(false);
   const user = useContext(AuthContext);
+  console.log("ID", event.id);
   useEffect(() => {
     setRegistrationsOpen(new Date(event.dateTo) >= new Date().getTime());
     if (user?.events?.some((e) => e?.event_id == event?.id))
       setRegistered(true);
-    console.log(user);
   }, [event, user]);
 
   function handleRegister(event, registrationsOpen) {
-    console.log(event.id);
     if (!registrationsOpen) {
       alert("Registrations are closed");
       return;
@@ -97,10 +96,10 @@ function EventCard({ event }) {
     <>
       <Card style={{ margin: "1rem" }} key={uuidv4()}>
         <Image
-          src={event.img || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
+          src={event?.img || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
           className="img-fluid w-100"
           alt={event.name}
-          style={{ maxHeight: "400px", objectFit: "cover" }} // Limit the height and ensure image covers space nicely
+          style={{ maxHeight: "400px", objectFit: "contain" }} // Limit the height and ensure image covers space nicely
         />
         <Card.Body>
           <div className="flex justify-between items-center">

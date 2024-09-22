@@ -7,6 +7,8 @@ import QuizDart from "./QuizDart.png";
 import ShortCoding from "./ShortCoding.png";
 import TreasureHunt from "./TreasureHunt.png";
 import TypingRace from "./TypingRace.png";
+import ShadowLands from "./ShadowLands.jpg";
+import TechQuiz from "./TechQuiz.png";
 
 export const images = {
   CssBattle,
@@ -18,4 +20,6 @@ export const images = {
   ShortCoding,
   TreasureHunt,
   TypingRace,
+  ShadowLands,
+  TechQuiz,
 };

@@ -8,6 +8,7 @@ import Sourab from "./Sourab.jpg";
 import Rishab from "./Rishab.jpg";
 import Abhi from "./Abhi.jpg";
 import Pawan from "./Pawan.jpg";
+import Rahul from "./Rahul.jpg";
 
 export const images = {
   Aditi,
@@ -20,4 +21,5 @@ export const images = {
   Rishab,
   Abhi,
   Pawan,
+  Rahul,
 };

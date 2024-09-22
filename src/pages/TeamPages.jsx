@@ -11,6 +11,7 @@ const team26 = [
   { name: "Debanjan", pos: "Office Bearer", img: images.Debanjan, year: 2026 },
   { name: "Nikhil", pos: "Office Bearer", img: images.Nikhil, year: 2026 },
   { name: "Pratham", pos: "Office Bearer", img: images.Pratham, year: 2026 },
+  { name: "Rahul", pos: "Office Bearer", img: images.Rahul, year: 2026 },
   { name: "Satish", pos: "Office Bearer", img: images.Satish, year: 2026 },
   { name: "Sourab", pos: "Office Bearer", img: images.Sourab, year: 2026 },
 ];

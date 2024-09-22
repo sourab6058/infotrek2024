@@ -9,6 +9,7 @@ function TeamCard({ name, pos, img, year }) {
       {/* Card background */}
       <img
         class="mx-auto mb-4 w-48 h-48 rounded-md"
+        // style={{ objectFit: "cover" }}
         src={img}
         alt={`${name}'s Avatar`}
       />
