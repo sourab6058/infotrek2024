@@ -4,6 +4,11 @@ import Col from "react-bootstrap/Col";
 import EventCard from "../components/EventCard";
 import Nav from "../components/Nav";
 import { images } from "../assets/imgs";
+import "./styles/Events.css"
+// import React, { useEffect } from "react";
+// import NET from "vanta/src/vanta.net";
+// import "./styles/TeamPage.css";
+
 const events = [
   {
     id: "ccb8efb0-04d1-4da9-92fb-964181f73df5",
@@ -106,35 +111,38 @@ const events = [
   },
 ];
 
+
 function Events() {
+  // useEffect(() => {
+  //   const netEffects = NET({
+  //     el: "#events",
+  //     mouseControls: true,
+  //     backgroundColor: "rgb(245, 245, 245)",
+  //     color: "rgb(85, 85, 85)", 
+  //     touchControls: true,
+  //     gyroControls: false,
+  //     minHeight: 400.0,
+  //     minWidth: 200.0,
+  //     scale: 200.0,
+  //     scaleMobile: 2.0,
+  //   });
+  // }, []);
+
   return (
     <>
       <Nav />
-      <Container className="my-5">
-        <h1 className="font-bold text-6xl">Events</h1>
-        {events &&
-          events.map(
-            (_, idx) =>
-              idx % 2 == 0 &&
-              (idx + 1 < events.length ? (
-                <Row>
-                  {[
-                    <Col>
-                      <EventCard event={events[idx]} />
-                    </Col>,
-                    <Col>
-                      <EventCard event={events[idx + 1]} />
-                    </Col>,
-                  ]}
-                </Row>
-              ) : (
-                <Row>
-                  <Col>{<EventCard event={events[idx]} />}</Col>
-                  <Col></Col>
-                </Row>
-              ))
-          )}
+    <div className="events" id = "events">
+      <Container className="events_container my-5">
+        <h1 className="font-bold text-center pb-5">Events</h1>
+        <Row style={{ paddingBottom: "2rem" }}>
+          {events.map((event, idx) => (
+            <Col xs={12} md={6} lg={4} key={event.id} className="mb-4">
+              <EventCard event={event} />
+            </Col>
+          ))}
+        </Row>
       </Container>
+    </div>
     </>
   );
 }

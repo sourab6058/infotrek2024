@@ -69,7 +69,7 @@ export default function AddEventModal({
       .then((res) => {
         if (res.status === 201) {
           clearForm();
-          console.log(res.data);
+          // console.log(res.data);
           window.location.reload(false);
         }
       });

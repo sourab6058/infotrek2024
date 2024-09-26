@@ -10,7 +10,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Events from "./pages/Events.jsx";
 import EventManager from "./admin/event/EventManager.jsx";
-import TeamPages from "./pages/TeamPages.jsx";
+import TeamPage from "./pages/TeamPage.jsx";
 import Profile from "./pages/Profile.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/team",
-    element: <TeamPages />,
+    element: <TeamPage />,
   },
   {
     path: "/profile",

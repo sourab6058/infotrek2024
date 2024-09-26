@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Badge, Card, Button, Image } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { useContext } from "react";
+import "../pages/styles/Events.css";
 
 import { AuthContext } from "../AuthContext";
 
@@ -14,7 +15,7 @@ function EventCard({ event }) {
   const [registrationsOpen, setRegistrationsOpen] = useState(false);
   const [registered, setRegistered] = useState(false);
   const user = useContext(AuthContext);
-  console.log("ID", event.id);
+  // console.log("ID", event.id);
   useEffect(() => {
     setRegistrationsOpen(new Date(event.dateTo) >= new Date().getTime());
     if (user?.events?.some((e) => e?.event_id == event?.id))
@@ -22,16 +23,15 @@ function EventCard({ event }) {
   }, [event, user]);
 
   function handleRegister(event, registrationsOpen) {
+    if(!user.isLoggedIn){
+      alert("You need to login first. ❌");
+      return;
+    }
+
     if (!registrationsOpen) {
       alert("Registrations are closed");
       return;
     }
-    // console.log("API", eventRegister, {
-    //   user_id: user.userId,
-    //   event_id: event.id,
-    //   team_name: "ind",
-    //   status: "registered",
-    // });
     axios
       .post(
         eventRegister,
@@ -46,7 +46,7 @@ function EventCard({ event }) {
         }
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status == 201) {
           alert("You have been successfully registerd for the event.✅");
           let events = JSON.parse(localStorage.getItem("events"));
@@ -57,7 +57,7 @@ function EventCard({ event }) {
         }
       })
       .catch((err) => {
-        console.error(err);
+        // console.error(err);
         if (err.response.status == 401)
           alert("➕You have already registerd for this event.➕");
         setRegistered(true);
@@ -76,7 +76,7 @@ function EventCard({ event }) {
         }
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status == 201)
           alert("Unregsitered from the event successfully.✅");
         let events = JSON.parse(localStorage.getItem("events"));
@@ -86,27 +86,27 @@ function EventCard({ event }) {
         setRegistered(false);
       })
       .catch((err) => {
-        console.error(err);
+        // console.error(err);
         if (err.response.status == 401)
           alert("➕You have already unregisterd for this event.➕");
         setRegistered(false);
       });
   }
   return (
-    <>
+    <div className="event_card">
       <Card style={{ margin: "1rem" }} key={uuidv4()}>
         <Image
           src={event?.img || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
           className="img-fluid w-100"
           alt={event.name}
-          style={{ maxHeight: "400px", objectFit: "contain" }} // Limit the height and ensure image covers space nicely
+          style={{ maxHeight: "250px", objectFit: "contain" }} // Limit the height and ensure image covers space nicely
         />
         <Card.Body>
-          <div className="flex justify-between items-center">
+          <div className="flex-col justify-between items-center pb-5">
             <Card.Title>
               <h1>{event.name}</h1>
             </Card.Title>
-            <Badge bg={registrationsOpen ? "success" : "secondary"}>
+            <Badge  bg={registrationsOpen ? "success" : "secondary"}>
               {registrationsOpen
                 ? "Registrations Open"
                 : "Registrations Closed"}
@@ -115,7 +115,7 @@ function EventCard({ event }) {
           <Card.Text>
             <p className="text-lg">{event.description}</p>
           </Card.Text>
-          <div className="flex justify-between">
+          <div className="flex-col justify-between">
             <div className="flex gap-5">
               <div className="flex flex-column gap-1">
                 <span>Location</span>
@@ -128,7 +128,7 @@ function EventCard({ event }) {
                 <span>{event.category}</span>
               </div>
             </div>
-            <div className="flex flex-column justify-end items-center">
+            <div className="flex flex-column justify-end items-center pt-3 min-w-100">
               {registered ? (
                 <Button
                   className="min-w-64"
@@ -143,11 +143,14 @@ function EventCard({ event }) {
                 </Button>
               ) : (
                 <Button
-                  className="min-w-64"
+                  className="min-w-64 "
                   disabled={
-                    new Date(event.date_to) < new Date().getTime() ||
-                    !user.isLoggedIn
+                    new Date(event.date_to) < new Date().getTime()
                   }
+                  // disabled={
+                  //   new Date(event.date_to) < new Date().getTime() ||
+                  //   !user.isLoggedIn
+                  // }
                   variant="success"
                   onClick={() => handleRegister(event, registrationsOpen)}
                 >
@@ -158,7 +161,7 @@ function EventCard({ event }) {
           </div>
         </Card.Body>
       </Card>
-    </>
+    </div>
   );
 }
 

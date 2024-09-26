@@ -13,16 +13,16 @@ const Profile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState();
+  const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(0);
   const [field, setField] = useState("");
   const [dob, setDob] = useState("mm/dd/yyyy");
 
   useEffect(() => {
-    console.log("USERNAME ", context?.username);
+    // console.log("USERNAME ", context?.username);
     setFirstName(context?.username?.split(" ")[0]);
-    setLastName(context?.username?.split(" ")[1]);
+    setLastName(context?.username?.split(" ")[1] === undefined ? "" : context?.username?.split(" ")[1]);
     setGender(context?.gender);
     setDob(context?.dob?.split("T")[0]);
   }, [context]);
@@ -40,7 +40,7 @@ const Profile = () => {
     };
 
     axios.put(`${updateProfileApi}/${context.userId}`, data).then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
 
       const data = {
         email: res.data.data.email.toLowerCase(),
@@ -74,7 +74,7 @@ const Profile = () => {
       setAge(0);
       return;
     }
-    console.log("dob", dob);
+    // console.log("dob", dob);
     const [year, month, day] = dob.split("-").map(Number);
 
     const birthDate = new Date(year, month - 1, day);
@@ -112,7 +112,6 @@ const Profile = () => {
     <div className="bg-gray-100 min-h-screen">
       <Nav />
       <div className="max-w-5xl mx-auto px-4 py-12">
-        {/* Top section with user information */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
           <div className="flex items-center justify-center px-10">
             <div className="flex items-center">
