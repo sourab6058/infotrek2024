@@ -71,6 +71,7 @@ function Login() {
       console.log("IM HERE");
       console.log(err);
       alert("Login unsuccessfull.❌");
+      setLoading(false)
     }
   }
 

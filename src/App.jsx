@@ -4,7 +4,7 @@ import Hero from "./components/Hero";
 function App() {
   return (
     <div className="main">
-      <Nav />
+      <Nav /> 
       <Hero />
     </div>
   );

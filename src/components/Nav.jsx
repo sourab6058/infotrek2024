@@ -4,6 +4,7 @@ import darkLogo from "../assets/infotrekdarklogo.png";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { ruleBook } from "../../api";
+import "../pages/styles/Nav.css"
 
 export default function Nav({ dark }) {
   const context = useContext(AuthContext);
@@ -17,7 +18,7 @@ export default function Nav({ dark }) {
     >
       <div className="flex justify-between w-full md:w-auto">
         <Link to="/">
-          <div className="min-w-[240px]">
+          <div className="min-w-[180px]">
             <img
               src={dark ? lightLogo : darkLogo}
               className="nav-logo-div"
@@ -51,7 +52,7 @@ export default function Nav({ dark }) {
           isOpen ? "flex" : "hidden"
         } md:flex`}
       >
-        <ol className="font-bold flex flex-col md:flex-row justify-between items-center md:min-w-[360px]">
+        <ol className="home_list font-bold flex flex-col md:flex-row justify-between items-center md:min-w-[360px]">
           <li>
             <Link
               to="/"
@@ -96,7 +97,7 @@ export default function Nav({ dark }) {
         </ol>
         <div className="flex flex-col md:flex-row justify-around items-center md:min-w-[240px]">
           {!context.isLoggedIn ? (
-            <Link to="/login" className="no-underline text-center">
+            <Link to="/login" className="profile_button no-underline text-center">
               <div
                 className={`border rounded-md py-2 px-3 ${
                   dark ? "hover:bg-green-900" : ""
@@ -112,7 +113,7 @@ export default function Nav({ dark }) {
               </div>
             </Link>
           ) : (
-            <Link to="/profile" className="no-underline text-center">
+            <Link to="/profile" className="profile_button no-underline text-center flex ">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500">
                 <p className="text-white font-bold m-0">
                   {context.username.charAt(0).toUpperCase()}

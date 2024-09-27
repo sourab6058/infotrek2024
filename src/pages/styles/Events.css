@@ -1,0 +1,16 @@
+.event_card {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: black;
+}
+
+@media only screen and (min-width: 900px) {
+  .events_container {
+    max-width: 80%;
+    margin: auto;
+  }
+}

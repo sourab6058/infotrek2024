@@ -32,7 +32,7 @@ function Register() {
   function handleSubmit(e, data) {
     e.preventDefault();
     setLoading(true);
-    console.log(data);
+    // console.log(data);
     try {
       axios.post(registerApi, data).then((response) => {
         alert("Registration successful✅. Now Login Please. ");
@@ -40,10 +40,10 @@ function Register() {
         setEmail("");
         setPassword("");
         navigate("/login");
-        console.log({ response });
+        // console.log({ response });
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
 
       alert("Registration Error ❌");
     }
@@ -71,6 +71,7 @@ function Register() {
           type="email"
           placeholder="Email"
           value={email}
+          required={true}
           onChange={(e) => setEmail(e.target.value)}
           className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
         />
