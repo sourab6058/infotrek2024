@@ -12,19 +12,20 @@ const About = () => {
             <h1 className="font-black text-green-1000 text-6xl uppercase">
               About Us
             </h1>
-            <p className="mt-4 text-lg text-gray-700">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              condimentum maximus mi, at dapibus quam pretium sit amet. Lorem
-              Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
+            <p className="mt-4 text-lg text-gray-700 font-semibold">
+              Infotrek, an Inter-Departmental Technical Symposium, held under
+              ACM, runs over few days, bringing in the indigenous minds of the
+              Campus under one roof thereby giving a stiff competition. It is a
+              blend of both Technical and Non-technical events. Technical events
+              comprising of Coding, Web-designing, Hacking, De-bugging, etc. The
+              Non-technical has in its back, events such as Dumb Charades, Quiz,
+              Treasure Hunt, Online game, etc to test your vocal and managerial
+              skills. And the endeavours are rewarded with cash prizes. Last but
+              not the least, Who is the Star of the Event? The answer to this
+              question hinges on the performance of the best performers in this
+              closing event. Infotrek bridges the gap between all the
+              departments and builds a platform to communicate well among the
+              same. It is not just a meet but 'Fun in the Run'.
             </p>
           </div>
         </div>

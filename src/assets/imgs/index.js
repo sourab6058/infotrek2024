@@ -1,22 +1,18 @@
-import CssBattle from "./CssBattle.png";
-import Debugging from "./Debugging.png";
-import Destinite from "./Destinite.png";
-import MicromaniaMadness from "./MicromaniaMadness.png";
-import OnlineGame from "./OnlineGame.png";
-import QuizDart from "./QuizDart.png";
-import ShortCoding from "./ShortCoding.png";
-import TreasureHunt from "./TreasureHunt.png";
-import TypingRace from "./TypingRace.png";
+import CssBattle from "./CssBattle.jpg";
+import Debugging from "./Debugging.jpg";
+import Destinite from "./Destinite.jpg";
+import MicromaniaMadness from "./MicromaniaMadness.jpg";
+import ShortCoding from "./ShortCoding.jpg";
+import TreasureHunt from "./TreasureHunt.jpg";
+import TypingRace from "./TypingRace.jpg";
 import ShadowLands from "./ShadowLands.jpg";
-import TechQuiz from "./TechQuiz.png";
+import TechQuiz from "./TechQuiz.jpg";
 
 export const images = {
   CssBattle,
   Debugging,
   Destinite,
   MicromaniaMadness,
-  OnlineGame,
-  QuizDart,
   ShortCoding,
   TreasureHunt,
   TypingRace,

@@ -1,9 +1,21 @@
 @media only screen and (max-width: 600px) {
-    .home_list{
-        /* margin-right: 1.4rem !important; */
-    }
-
-    .profile_button{
-        padding-bottom: 1rem;
-    }
+  .home_list {
+    /* margin-right: 1.4rem !important; */
   }
+
+  .profile_button {
+    padding-bottom: 1rem;
+  }
+  ol,
+  ul {
+    padding-left: 0 !important;
+  }
+  .nav-dp-icon {
+    margin-top: 1rem;
+  }
+}
+dl,
+ol,
+ul {
+  margin-bottom: 0 !important;
+}

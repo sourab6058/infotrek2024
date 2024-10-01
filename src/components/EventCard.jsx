@@ -23,7 +23,7 @@ function EventCard({ event }) {
   }, [event, user]);
 
   function handleRegister(event, registrationsOpen) {
-    if(!user.isLoggedIn){
+    if (!user.isLoggedIn) {
       alert("You need to login first. ❌");
       return;
     }
@@ -106,7 +106,7 @@ function EventCard({ event }) {
             <Card.Title>
               <h1>{event.name}</h1>
             </Card.Title>
-            <Badge  bg={registrationsOpen ? "success" : "secondary"}>
+            <Badge bg={registrationsOpen ? "success" : "secondary"}>
               {registrationsOpen
                 ? "Registrations Open"
                 : "Registrations Closed"}
@@ -118,12 +118,10 @@ function EventCard({ event }) {
           <div className="flex-col justify-between">
             <div className="flex gap-5">
               <div className="flex flex-column gap-1">
-                <span>Location</span>
                 <span>Last Date</span>
                 <span>Category</span>
               </div>
               <div className="flex flex-column gap-1">
-                <span>{event.location}</span>
                 <span>{new Date(event.dateTo).toLocaleDateString()}</span>
                 <span>{event.category}</span>
               </div>
@@ -144,9 +142,7 @@ function EventCard({ event }) {
               ) : (
                 <Button
                   className="min-w-64 "
-                  disabled={
-                    new Date(event.date_to) < new Date().getTime()
-                  }
+                  disabled={new Date(event.date_to) < new Date().getTime()}
                   // disabled={
                   //   new Date(event.date_to) < new Date().getTime() ||
                   //   !user.isLoggedIn

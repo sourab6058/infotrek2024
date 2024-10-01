@@ -28,7 +28,7 @@ function TeamPage() {
       el: "#net_vanta",
       mouseControls: true,
       backgroundColor: "rgb(245, 245, 245)",
-      color: "rgb(85, 85, 85)", 
+      color: "rgb(85, 85, 85)",
       touchControls: true,
       gyroControls: false,
       minHeight: 400.0,
@@ -50,10 +50,10 @@ function TeamPage() {
                 {" "}
                 Our team
               </h2>
-              <p class="font-light text-gray-700 sm:text-xl dark:text-gray-400">
+              <p class="font-bold  sm:text-xl dark:text-gray-600">
                 {" "}
-                Explore the whole collection of open-source web components and
-                elements built with utility classes.
+                Meet the passionate innovators and problem-solvers driving
+                technology forward at ACM Student Chapter of NIT Trichy.
               </p>
             </div>
             <div class="grid gap-8 lg:gap-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">

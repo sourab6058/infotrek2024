@@ -4,7 +4,7 @@ import darkLogo from "../assets/infotrekdarklogo.png";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { ruleBook } from "../../api";
-import "../pages/styles/Nav.css"
+import "../pages/styles/Nav.css";
 
 export default function Nav({ dark }) {
   const context = useContext(AuthContext);
@@ -97,7 +97,10 @@ export default function Nav({ dark }) {
         </ol>
         <div className="flex flex-col md:flex-row justify-around items-center md:min-w-[240px]">
           {!context.isLoggedIn ? (
-            <Link to="/login" className="profile_button no-underline text-center">
+            <Link
+              to="/login"
+              className="profile_button no-underline text-center"
+            >
               <div
                 className={`border rounded-md py-2 px-3 ${
                   dark ? "hover:bg-green-900" : ""
@@ -113,8 +116,11 @@ export default function Nav({ dark }) {
               </div>
             </Link>
           ) : (
-            <Link to="/profile" className="profile_button no-underline text-center flex ">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500">
+            <Link
+              to="/profile"
+              className="profile_button no-underline text-center flex "
+            >
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500  nav-dp-icon">
                 <p className="text-white font-bold m-0">
                   {context.username.charAt(0).toUpperCase()}
                 </p>
