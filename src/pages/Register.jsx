@@ -15,6 +15,8 @@ import "./styles/register.css";
 import { registerApi } from "../../api";
 import { AuthContext } from "../AuthContext";
 
+import { emailRegex, passwordRegex } from "../../utils/constants";
+
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,7 +33,14 @@ function Register() {
   const navigate = useNavigate();
   function handleSubmit(e, data) {
     e.preventDefault();
+
+    if (!passwordRegex.test(password) || !emailRegex.test(email)) {
+      alert("Password and/or email doesn't meet the criteria.");
+      return;
+    }
+
     setLoading(true);
+
     // console.log(data);
     try {
       axios.post(registerApi, data).then((response) => {
@@ -48,6 +57,7 @@ function Register() {
       alert("Registration Error ❌");
     }
   }
+
   return (
     <section className="login-section flex items-center justify-center min-h-screen bg-green-1000">
       <div className="flex flex-col items-center justify-center text-off-white p-5 max-w-[90vw] sm:max-w-[60vw] lg:max-w-[45vw]">
@@ -75,14 +85,21 @@ function Register() {
           onChange={(e) => setEmail(e.target.value)}
           className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
         />
+        <div>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
+          ></input>
+          <span>
+            Password must be atleast 8 characters long, contain atleast 1
+            uppercase alphabet, 1 lowercase alphabet and one of the special
+            characters ($#@()!%^&*).
+          </span>
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
-        />
         <button
           disabled={
             email.length === 0 || password.length === 0 || name.length === 0

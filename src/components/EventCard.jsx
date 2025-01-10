@@ -8,6 +8,7 @@ import "../pages/styles/Events.css";
 import { AuthContext } from "../AuthContext";
 
 import { eventRegister, eventUnregister } from "../../api";
+import { Link } from "react-router-dom";
 
 const token = localStorage.getItem("auth_token");
 
@@ -22,7 +23,7 @@ function EventCard({ event }) {
       setRegistered(true);
   }, [event, user]);
 
-  function handleRegister(event, registrationsOpen) {
+  function handleRegister(event, registrationsOpen, user) {
     if (!user.isLoggedIn) {
       alert("You need to login first. ❌");
       return;
@@ -46,7 +47,7 @@ function EventCard({ event }) {
         }
       )
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         if (res.status == 201) {
           alert("You have been successfully registerd for the event.✅");
           let events = JSON.parse(localStorage.getItem("events"));
@@ -58,9 +59,12 @@ function EventCard({ event }) {
       })
       .catch((err) => {
         // console.error(err);
-        if (err.response.status == 401)
+        if (err.response.status == 401) {
           alert("➕You have already registerd for this event.➕");
-        setRegistered(true);
+          setRegistered(true);
+        } else {
+          alert("You are not logged in❗❗");
+        }
       });
   }
   function handleUnregister(event) {
@@ -99,12 +103,12 @@ function EventCard({ event }) {
           src={event?.img || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
           className="img-fluid w-100"
           alt={event.name}
-          style={{ maxHeight: "250px", objectFit: "contain" }} // Limit the height and ensure image covers space nicely
+          style={{ maxHeight: "360px", objectFit: "cover" }} // Limit the height and ensure image covers space nicely
         />
         <Card.Body>
           <div className="flex-col justify-between items-center pb-5">
             <Card.Title>
-              <h1>{event.name}</h1>
+              <h2>{event.name}</h2>
             </Card.Title>
             <Badge bg={registrationsOpen ? "success" : "secondary"}>
               {registrationsOpen
@@ -120,20 +124,22 @@ function EventCard({ event }) {
               <div className="flex flex-column gap-1">
                 <span>Last Date</span>
                 <span>Category</span>
+                <span>Location</span>
               </div>
               <div className="flex flex-column gap-1">
                 <span>{new Date(event.dateTo).toLocaleDateString()}</span>
                 <span>{event.category}</span>
+                <span>{event.location}</span>
               </div>
             </div>
-            <div className="flex flex-column justify-end items-center pt-3 min-w-100">
+            <div className="flex justify-end items-center pt-3 min-w-100 gap-2">
               {registered ? (
                 <Button
                   className="min-w-64"
-                  disabled={
-                    new Date(event.date_to) < new Date().getTime() ||
-                    !user.isLoggedIn
-                  }
+                  // disabled={
+                  //   new Date(event.date_to) < new Date().getTime() ||
+                  //   !user.isLoggedIn
+                  // }
                   variant="danger"
                   onClick={() => handleUnregister(event)}
                 >
@@ -148,11 +154,14 @@ function EventCard({ event }) {
                   //   !user.isLoggedIn
                   // }
                   variant="success"
-                  onClick={() => handleRegister(event, registrationsOpen)}
+                  onClick={() => handleRegister(event, registrationsOpen, user)}
                 >
                   <b>Register</b>
                 </Button>
               )}
+              <Link to="#" style={{ visibility: "hidden", width: 0 }}>
+                <Button>View More</Button>
+              </Link>
             </div>
           </div>
         </Card.Body>

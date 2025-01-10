@@ -7,6 +7,7 @@ import TreasureHunt from "./TreasureHunt.jpg";
 import TypingRace from "./TypingRace.jpg";
 import ShadowLands from "./ShadowLands.jpg";
 import TechQuiz from "./TechQuiz.jpg";
+import dogorobo from "./dogorobo.jpg";
 
 export const images = {
   CssBattle,
@@ -18,4 +19,5 @@ export const images = {
   TypingRace,
   ShadowLands,
   TechQuiz,
+  dogorobo
 };

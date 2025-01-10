@@ -14,9 +14,9 @@ import semicircle from "../assets/semicircle.svg";
 import sunrise from "../assets/sunrise.svg";
 
 import "./styles/login.css";
-import { Button } from "react-bootstrap";
 
 import { loginApi } from "../../api";
+import { emailRegex, passwordRegex } from "../../utils/constants";
 
 function Login() {
   const { isLoggedIn, login, logout } = useContext(AuthContext);
@@ -33,6 +33,10 @@ function Login() {
 
   async function signIn(e, data) {
     e.preventDefault();
+    if (!passwordRegex.test(password) || !emailRegex.test(email)) {
+      alert("Password and/or email doesn't meet the criteria.");
+      return;
+    }
     setLoading(true);
     console.log(data);
     try {
@@ -41,7 +45,6 @@ function Login() {
       if (response.status === 200) {
         const formattedDob = formatDateyyyyMMdd(response.data.data.dob);
         console.log("HHHHHH", response.data);
-        alert("You're successfully logged in.✅");
         localStorage.setItem("email", email.toLowerCase());
         localStorage.setItem("authorized", "true");
         localStorage.setItem("name", response.data.data.name);
@@ -71,7 +74,7 @@ function Login() {
       console.log("IM HERE");
       console.log(err);
       alert("Login unsuccessfull.❌");
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -97,13 +100,15 @@ function Login() {
           onChange={(e) => setEmail(e.target.value)}
           className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
-        />
+        <div className="w-100 d-flex items-center justify-items-center items-stretch h-100">
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
+          />
+        </div>
         <button
           disabled={email.length === 0 || password.length === 0}
           className={

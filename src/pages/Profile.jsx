@@ -16,13 +16,16 @@ const Profile = () => {
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(0);
-  const [field, setField] = useState("");
   const [dob, setDob] = useState("mm/dd/yyyy");
 
   useEffect(() => {
     // console.log("USERNAME ", context?.username);
     setFirstName(context?.username?.split(" ")[0]);
-    setLastName(context?.username?.split(" ")[1] === undefined ? "" : context?.username?.split(" ")[1]);
+    setLastName(
+      context?.username?.split(" ")[1] === undefined
+        ? ""
+        : context?.username?.split(" ")[1]
+    );
     setGender(context?.gender);
     setDob(context?.dob?.split("T")[0]);
   }, [context]);
@@ -31,7 +34,6 @@ const Profile = () => {
 
   const handleSubmit = (e, context, dob, gender) => {
     e.preventDefault();
-    alert("Profile updated successfully!");
     const data = {
       username: firstName + " " + lastName,
       email: context?.email,
@@ -39,28 +41,35 @@ const Profile = () => {
       gender: gender,
     };
 
-    axios.put(`${updateProfileApi}/${context.userId}`, data).then((res) => {
-      // console.log(res.data.data);
+    axios
+      .put(`${updateProfileApi}/${context.userId}`, data)
+      .then((res) => {
+        console.log(res.data.data);
 
-      const data = {
-        email: res.data.data.email.toLowerCase(),
-        username: res.data.data.name,
-        dob: res.data.data.dob,
-        imgUrl: res.data.data.img_url,
-        gender: res.data.data.gender,
-        token: context.token,
-        userId: res.data.data.id,
-        events: context.events,
-      };
-      context.login(data);
-      setFirstName(res.data.data.name.split(" ")[0]);
-      setLastName(res.data.data.name.split(" ")[1]);
-      setDob(res.data.data.dob.split("T")[0]);
-      setGender(res.data.data.gender);
-      localStorage.setItem("name", res.data.data.name);
-      localStorage.setItem("dob", res.data.data.dob);
-      localStorage.setItem("gender", res.data.data.gender);
-    });
+        const data = {
+          email: res.data.data.email.toLowerCase(),
+          username: res.data.data.name,
+          dob: res.data.data.dob,
+          imgUrl: res.data.data.img_url,
+          gender: res.data.data.gender,
+          token: context.token,
+          userId: res.data.data.id,
+          events: context.events,
+        };
+        context.login(data);
+        setFirstName(res.data.data.name.split(" ")[0]);
+        setLastName(res.data.data.name.split(" ")[1]);
+        setDob(res.data.data.dob.split("T")[0]);
+        setGender(res.data.data.gender);
+        localStorage.setItem("name", res.data.data.name);
+        localStorage.setItem("dob", res.data.data.dob);
+        localStorage.setItem("gender", res.data.data.gender);
+        alert("Profile updated successfully!");
+      })
+      .catch((e) => {
+        console.log("EDIT ERROR:", e);
+        alert("Some problem in editting the profile❌.");
+      });
 
     setIsEditing(false); // Disable editing mode after submission
   };
@@ -126,23 +135,13 @@ const Profile = () => {
               </div>
             </div>
             <div className="ml-auto">
-              {!isEditing ? (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(true)}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-                >
-                  Edit
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  onClick={(e) => handleSubmit(e, context, dob, gender)}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-200"
-                >
-                  Save
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200"
+              >
+                Logout
+              </button>
             </div>
           </div>
         </div>
@@ -242,28 +241,8 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Field and Date of Birth */}
+          {/*  Date of Birth */}
           <div className="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <label
-                htmlFor="field"
-                className="block text-gray-700 font-bold mb-2"
-              >
-                Field
-              </label>
-              <input
-                type="text"
-                id="field"
-                name="field"
-                value={field}
-                onChange={(e) => setField(e.target.value)}
-                readOnly={!isEditing}
-                className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
-                  isEditing ? "border-gray-300" : "border-transparent"
-                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-                placeholder="Field"
-              />
-            </div>
             <div>
               <label
                 htmlFor="dob"
@@ -294,13 +273,22 @@ const Profile = () => {
 
           {/* Logout button */}
           <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200"
-            >
-              Logout
-            </button>
+            {!isEditing ? (
+              <button
+                type="button"
+                onClick={() => setIsEditing(true)}
+                className="px-4 py-2 bg-blue-500 min-w-[100px] text-white rounded-lg hover:bg-blue-600 transition duration-200"
+              >
+                Edit
+              </button>
+            ) : (
+              <button
+                onClick={(e) => handleSubmit(e, context, dob, gender)}
+                className="px-4 py-2 bg-green-500 text-white min-w-[100px] rounded-lg hover:bg-green-600 transition duration-200"
+              >
+                Save
+              </button>
+            )}
           </div>
         </form>
       </div>

@@ -14,3 +14,9 @@
     margin: auto;
   }
 }
+
+.custom-shadow-header {
+  -webkit-box-shadow: 89px 21px 342px -73px rgba(0, 0, 0, 0.75) inset;
+  -moz-box-shadow: 89px 21px 342px -73px rgba(0, 0, 0, 0.75) inset;
+  box-shadow: 89px 21px 342px -73px rgba(0, 0, 0, 0.75) inset;
+}

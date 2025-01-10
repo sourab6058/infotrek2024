@@ -5,9 +5,6 @@ import EventCard from "../components/EventCard";
 import Nav from "../components/Nav";
 import { images } from "../assets/imgs";
 import "./styles/Events.css";
-// import React, { useEffect } from "react";
-// import NET from "vanta/src/vanta.net";
-// import "./styles/TeamPage.css";
 
 const events = [
   {
@@ -16,9 +13,9 @@ const events = [
     img: images.ShortCoding,
     description:
       "Short coding event focusing on solving algorithmic challenges in limited time.",
-    dateFrom: "2024-06-13",
-    dateTo: "2024-11-22",
-    location: "Trichy",
+    dateFrom: "2025-01-10",
+    dateTo: "2025-01-17",
+    location: "Marigold Lab, Third I",
     category: "Technical",
     status: true,
   },
@@ -28,9 +25,9 @@ const events = [
     img: images.Debugging,
     description:
       "Debugging event where participants fix code errors within given constraints.",
-    dateFrom: "2024-09-13",
-    dateTo: "2024-11-22",
-    location: "Chennai",
+    dateFrom: "2025-01-10",
+    dateTo: "2025-01-18",
+    location: "Marigold Lab, Third I",
     category: "Technical",
     status: false,
   },
@@ -40,9 +37,9 @@ const events = [
     img: images.TechQuiz,
     description:
       "A tech-themed quiz challenging participants' knowledge across technology domains.",
-    dateFrom: "2024-09-13",
-    dateTo: "2024-11-22",
-    location: "Bangalore",
+    dateFrom: "2025-01-10",
+    dateTo: "2025-01-19",
+    location: "Marigold Lab, Third I",
     category: "Technical",
     status: true,
   },
@@ -52,9 +49,9 @@ const events = [
     img: images.CssBattle,
     description:
       "Development-based event with 2 rounds focused on front-end design and coding.",
-    location: "Hyderabad",
-    dateFrom: "2024-09-13",
-    dateTo: "2024-11-22",
+    location: "Marigold Lab, Third I",
+    dateFrom: "2025-01-10",
+    dateTo: "2025-01-19",
     category: "Technical",
     status: true,
   },
@@ -64,9 +61,9 @@ const events = [
     img: images.ShadowLands,
     description:
       "Online gaming event developed by ACM members, testing strategy and gaming skills.",
-    dateFrom: "2024-06-13",
-    dateTo: "2022-11-22",
-    location: "Trichy",
+    dateFrom: "2025-01-10",
+    dateTo: "2025-01-17",
+    location: "Hostel",
     category: "Non-Technical",
     status: true,
   },
@@ -76,9 +73,9 @@ const events = [
     img: images.TreasureHunt,
     description:
       " A treasure hunt event requiring problem-solving and puzzle-solving skills.",
-    dateFrom: "2024-09-13",
-    dateTo: "2024-11-22",
-    location: "Chennai",
+    dateFrom: "2025-01-10",
+    dateTo: "2025-01-18",
+    location: "Marigold Lab, Third I",
     category: "Non-Technical",
     status: false,
   },
@@ -88,21 +85,9 @@ const events = [
     img: images.TypingRace,
     description:
       " A speed-based typing race event testing participants' typing accuracy and speed.",
-    dateFrom: "2024-09-13",
-    dateTo: "2024-11-22",
-    location: "Bangalore",
-    category: "Non-Technical",
-    status: true,
-  },
-  {
-    id: "6785ccdd-bf3f-4cce-aa92-c8194056b880",
-    name: "Micromania Madness",
-    img: images.MicromaniaMadness,
-    description:
-      "Fun, non-tech event focused on entertainment and creative challenges.",
-    location: "Hyderabad",
-    dateFrom: "2024-09-13",
-    dateTo: "2024-11-22",
+    dateFrom: "2025-01-10",
+    dateTo: "2025-01-18",
+    location: "Marigold Lab, Third I",
     category: "Non-Technical",
     status: true,
   },
@@ -112,36 +97,35 @@ const events = [
     img: images.Destinite,
     description:
       "Personal interview event evaluating communication and personal presentation skills.",
-    location: "Hyderabad",
-    dateFrom: "2024-09-13",
-    dateTo: "2024-11-22",
+    location: "GJCH Hall",
+    dateFrom: "2025-01-10",
+    dateTo: "2025-01-19",
     category: "Non-Technical",
     status: true,
   },
 ];
 
 function Events() {
-  // useEffect(() => {
-  //   const netEffects = NET({
-  //     el: "#events",
-  //     mouseControls: true,
-  //     backgroundColor: "rgb(245, 245, 245)",
-  //     color: "rgb(85, 85, 85)",
-  //     touchControls: true,
-  //     gyroControls: false,
-  //     minHeight: 400.0,
-  //     minWidth: 200.0,
-  //     scale: 200.0,
-  //     scaleMobile: 2.0,
-  //   });
-  // }, []);
-
   return (
     <>
       <Nav />
       <div className="events" id="events">
+        <div className="w-100 flex h-[40vh] bg-[#43754c] flex-row items-center justify-content-start pl-2 mb-2 text-white overflow-hidden custom-shadow-header">
+          <div>
+            <p className="font-black text-5xl md:text-6xl">Featured Events</p>
+            <p className="ml-1 font-thin text-2xl md:text-3xl">
+              Innovate. Code. Conquer.
+            </p>
+          </div>
+          {/* <div className="bg-green-1000 sm:bg-white sm:w-[fit-content] sm:h-[fit-content] w-0 h-0 sm:p-0 p-2  rounded ">
+            <img
+              alt="a dog robot going for trekk in the mountains"
+              src={images.dogorobo}
+              className="sm:w-40 rounded w-0"
+            />
+          </div> */}
+        </div>
         <Container className="events_container my-5">
-          <h1 className="font-bold text-center pb-5">Events</h1>
           <Row style={{ paddingBottom: "2rem" }}>
             {events.map((event, idx) => (
               <Col xs={12} md={6} lg={4} key={event.id} className="mb-4">
