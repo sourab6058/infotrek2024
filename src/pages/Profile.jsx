@@ -16,6 +16,10 @@ const Profile = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
+  const [phone, setPhone] = useState("");
+  const [rollNum, setRollNum] = useState("");
+  const [course, setCourse] = useState("");
+  const [year, setYear] = useState("");
   const [age, setAge] = useState(0);
   const [dob, setDob] = useState("mm/dd/yyyy");
 
@@ -33,18 +37,44 @@ const Profile = () => {
         : context?.username?.split(" ")[1]
     );
     setGender(context?.gender);
+    setYear(context?.year);
+    setCourse(context?.course);
+    setPhone(context?.phone);
+    setRollNum(context?.rollNum);
     setDob(context?.dob?.split("T")[0]);
   }, [context]);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e, context, dob, gender) => {
+  const handleSubmit = (
+    e,
+    context,
+    dob,
+    gender,
+    course,
+    rollNum,
+    year,
+    phone
+  ) => {
     e.preventDefault();
+    if (!course || !rollNum || !year || !phone) {
+      setVariant("danger");
+      setAlertTitle("Missing Fields.");
+      setAlertMsg(
+        "Star marked fields cannot be left empty. Please update your profile."
+      );
+      setShow(true);
+      return;
+    }
     const data = {
       username: firstName + " " + lastName,
       email: context?.email,
       dob: dob,
       gender: gender,
+      phone,
+      course,
+      rollNum,
+      year,
     };
     console.log(context);
     axios
@@ -58,6 +88,10 @@ const Profile = () => {
           dob: res.data.data.dob,
           imgUrl: res.data.data.img_url,
           gender: res.data.data.gender,
+          phone: res.data.data.phone,
+          year: res.data.data.year,
+          course: res.data.data.course,
+          rollNum: res.data.data.roll_num,
           token: context.token,
           userId: res.data.data.id,
           events: context.events,
@@ -67,9 +101,17 @@ const Profile = () => {
         setLastName(res.data.data.name.split(" ")[1]);
         setDob(res.data.data.dob.split("T")[0]);
         setGender(res.data.data.gender);
+        setPhone(res.data.data.phone);
+        setYear(res.data.data.year);
+        setCourse(res.data.data.course);
+        setRollNum(res.data.data.roll_num);
         localStorage.setItem("name", res.data.data.name);
         localStorage.setItem("dob", res.data.data.dob);
         localStorage.setItem("gender", res.data.data.gender);
+        localStorage.setItem("phone", res.data.data.phone);
+        localStorage.setItem("course", res.data.data.course);
+        localStorage.setItem("year", res.data.data.year);
+        localStorage.setItem("rollNum", res.data.data.roll_num);
         setVariant("success");
         setAlertTitle("Profile Updated.");
         setAlertMsg("You have successfully updated your profile.");
@@ -98,9 +140,9 @@ const Profile = () => {
       return;
     }
     // console.log("dob", dob);
-    const [year, month, day] = dob.split("-").map(Number);
+    const [year_, month, day] = dob.split("-").map(Number);
 
-    const birthDate = new Date(year, month - 1, day);
+    const birthDate = new Date(year_, month - 1, day);
     const today = new Date();
 
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -165,7 +207,7 @@ const Profile = () => {
           </div>
 
           {/* Form section with user details */}
-          <form
+          <div
             onSubmit={handleSubmit}
             className="bg-white rounded-lg shadow-lg p-8"
           >
@@ -176,7 +218,7 @@ const Profile = () => {
                   htmlFor="firstName"
                   className="block text-gray-700 font-bold mb-2"
                 >
-                  First Name
+                  First Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -237,7 +279,7 @@ const Profile = () => {
                   placeholder="Gender"
                 />
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="age"
                   className="block text-gray-700 font-bold mb-2"
@@ -256,11 +298,91 @@ const Profile = () => {
                   placeholder="Age"
                   disabled={true}
                 />
+              </div> */}
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="block text-gray-700 font-bold mb-2"
+                >
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  readOnly={!isEditing}
+                  className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                    isEditing ? "border-gray-300" : "border-transparent"
+                  } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                  placeholder="Phone Number"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="roll_num"
+                  className="block text-gray-700 font-bold mb-2"
+                >
+                  Roll Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="roll_num"
+                  name="roll_num"
+                  value={rollNum}
+                  readOnly={!isEditing}
+                  onChange={(e) => setRollNum(e.target.value)}
+                  className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                    isEditing ? "border-gray-300" : "border-transparent"
+                  } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                  placeholder="Roll Number"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="course"
+                  className="block text-gray-700 font-bold mb-2"
+                >
+                  Course <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="course"
+                  name="course"
+                  value={course}
+                  readOnly={!isEditing}
+                  onChange={(e) => setCourse(e.target.value)}
+                  className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                    isEditing ? "border-gray-300" : "border-transparent"
+                  } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                  placeholder="MCA"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="year"
+                  className="block text-gray-700 font-bold mb-2"
+                >
+                  Year <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="year"
+                  name="year"
+                  value={year}
+                  readOnly={!isEditing}
+                  onChange={(e) => setYear(e.target.value)}
+                  className={`px-4 py-2 w-full bg-gray-100 rounded-lg border ${
+                    isEditing ? "border-gray-300" : "border-transparent"
+                  } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                  placeholder="1"
+                />
               </div>
             </div>
 
             {/*  Date of Birth */}
-            <div className="grid grid-cols-2 gap-6 mb-6">
+            {/* <div className="grid grid-cols-2 gap-6 mb-6">
               <div>
                 <label
                   htmlFor="dob"
@@ -281,11 +403,16 @@ const Profile = () => {
                   placeholder="Date of Birth"
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Email icon and email */}
             <div className="flex items-center mb-6">
-              <FiMail className="text-2xl text-gray-700 mr-2" />
+              <small className="text-red-500">
+                *Star marked fields are mandatory to update.
+              </small>
+            </div>
+            <div className="flex items-center mb-6 justify-content-start">
+              <FiMail className="text-2xl text-gray-700 mr-2 mb-3" />
               <p className="text-gray-700">{context.email}</p>
             </div>
 
@@ -294,21 +421,35 @@ const Profile = () => {
               {!isEditing ? (
                 <button
                   type="button"
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => {
+                    // setShow(false);
+                    setIsEditing(true);
+                  }}
                   className="px-4 py-2 bg-blue-500 min-w-[100px] text-white rounded-lg hover:bg-blue-600 transition duration-200"
                 >
                   Edit
                 </button>
               ) : (
                 <button
-                  onClick={(e) => handleSubmit(e, context, dob, gender)}
+                  onClick={(e) =>
+                    handleSubmit(
+                      e,
+                      context,
+                      dob,
+                      gender,
+                      course,
+                      rollNum,
+                      year,
+                      phone
+                    )
+                  }
                   className="px-4 py-2 bg-green-500 text-white min-w-[100px] rounded-lg hover:bg-green-600 transition duration-200"
                 >
                   Save
                 </button>
               )}
             </div>
-          </form>
+          </div>
         </div>
       </div>
 

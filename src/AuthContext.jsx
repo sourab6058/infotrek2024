@@ -8,6 +8,10 @@ function AuthProvider(props) {
   const [token, setToken] = useState(null);
   const [username, setUsername] = useState(null);
   const [gender, setGender] = useState(null);
+  const [phone, setPhone] = useState("");
+  const [rollNum, setRollNum] = useState("");
+  const [course, setCourse] = useState("");
+  const [year, setYear] = useState("");
   const [dob, setDob] = useState(null);
   const [email, setEmail] = useState(null);
   const [imgUrl, setImgUrl] = useState(null);
@@ -22,6 +26,10 @@ function AuthProvider(props) {
         username: localStorage.getItem("name"),
         email: localStorage.getItem("email"),
         gender: localStorage.getItem("gender"),
+        year: localStorage.getItem("year"),
+        course: localStorage.getItem("course"),
+        phone: localStorage.getItem("phone"),
+        rollNum: localStorage.getItem("rollNum"),
         dob: localStorage.getItem("dob"),
         imgUrl: localStorage.getItem("imgUrl"),
         userId: localStorage.getItem("userId"),
@@ -36,6 +44,10 @@ function AuthProvider(props) {
     setToken(data.token);
     setUsername(data.username);
     setGender(data.gender);
+    setYear(data.year);
+    setCourse(data.course);
+    setPhone(data.phone);
+    setRollNum(data.rollNum);
     setDob(data.dob);
     setEmail(data.email);
     setImgUrl(data.imgUrl);
@@ -55,6 +67,10 @@ function AuthProvider(props) {
     email,
     dob,
     gender,
+    course,
+    rollNum,
+    year,
+    phone,
     imgUrl,
     userId,
     token,

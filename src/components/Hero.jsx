@@ -14,8 +14,12 @@ export default function Hero() {
         </div>
         <div className="hero-image flex flex-col justify-top items-center mt-4 md:mt-8 lg:mt-12">
           <div className="flex flex-col justify-top items-center animate-future-text">
+            <span className="text-slate-200 font-thin text-2xl">
+              Powered by ACM Student Chapter, Department of Computer
+              Applications, NIT Trichy.
+            </span>
             <div className="w-full md:w-[600px] lg:w-[800px] text-center text-off-white mt-4 md:mt-6 lg:mt-8 px-4">
-              Join Info Trek for captivating tech events! Whether you love
+              Join Infotrek for captivating tech events! Whether you love
               coding, design, or networking, we’ve got something exciting
               waiting for you.
             </div>

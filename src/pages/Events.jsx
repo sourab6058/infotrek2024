@@ -133,7 +133,7 @@ function Events() {
         <Container className="events_container my-5">
           <Row style={{ paddingBottom: "2rem" }}>
             {events.map((event, idx) => (
-              <Col xs={12} md={6} lg={4} key={event.id} className="mb-4">
+              <Col xs={12} md={8} lg={4} key={event.id} className="mb-4">
                 <EventCard
                   event={event}
                   setShow={setShow}

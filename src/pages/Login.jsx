@@ -61,6 +61,10 @@ function Login() {
         localStorage.setItem("dob", formattedDob);
         localStorage.setItem("imgUrl", response.data.data.img_url);
         localStorage.setItem("gender", response.data.data.gender);
+        localStorage.setItem("phone", response.data.data.phone);
+        localStorage.setItem("year", response.data.data.year);
+        localStorage.setItem("course", response.data.data.course);
+        localStorage.setItem("rollNum", response.data.data.roll_num);
         localStorage.setItem("userId", response.data.data.id);
         localStorage.setItem("auth_token", response.data.token);
         localStorage.setItem("role", response.data.data.role);
@@ -74,6 +78,10 @@ function Login() {
           dob: formattedDob,
           imgUrl: response.data.data.img_url,
           gender: response.data.data.gender,
+          year: response.data.data.year,
+          rollNum: response.data.data.roll_num,
+          course: response.data.data.course,
+          phone: response.data.data.phone,
           token: response.data.token,
           userId: response.data.data.id,
           events: response.data.data.events,

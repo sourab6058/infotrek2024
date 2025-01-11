@@ -1,8 +1,10 @@
+import { useContext, useEffect, useState } from "react";
+import { FaLocationDot } from "react-icons/fa6";
+import { AiFillClockCircle } from "react-icons/ai";
+import { BiSolidCategoryAlt } from "react-icons/bi";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Badge, Card, Button, Image } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
-import { useContext } from "react";
 import "../pages/styles/Events.css";
 
 import { AuthContext } from "../AuthContext";
@@ -123,9 +125,13 @@ function EventCard({ event, setAlertMsg, setShow, setAlertTitle, setVariant }) {
       <Card style={{ margin: "1rem" }} key={uuidv4()}>
         <Image
           src={event?.img || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
-          className="img-fluid w-100"
+          className="img-fluid w-80"
           alt={event.name}
-          style={{ maxHeight: "360px", objectFit: "cover" }} // Limit the height and ensure image covers space nicely
+          style={{
+            maxHeight: "fit-content",
+            objectFit: "contain",
+            objectPosition: "center",
+          }} // Limit the height and ensure image covers space nicely
         />
         <Card.Body>
           <div className="flex-col justify-between items-center pb-5">
@@ -185,6 +191,43 @@ function EventCard({ event, setAlertMsg, setShow, setAlertTitle, setVariant }) {
         </Card.Body>
       </Card>
     </div>
+    // <div className="bg-white rounded shadow flex flex-column p-2">
+    //   <div className="flex flex-row gap-2 min-h-[250px]">
+    //     <img
+    //       src={event?.img || "https://via.placeholder.com/600x400"}
+    //       alt="Logo for the event"
+    //       className="w-50 rounded"
+    //     />
+    //     <div className="flex flex-column items-start justify-content-between">
+    //       <span className="font-bold text-3xl">{event.name}</span>
+    //       <div className="flex-column mt-2  text-slate-700">
+    //         <div className="flex gap-1 items-center font-semibold mb-1">
+    //           <FaLocationDot className="text-green-400 text-2xl" />
+    //           {event.location}
+    //         </div>
+    //         <div className="flex gap-1 items-center mb-1">
+    //           <span className="font-semibold">
+    //             <AiFillClockCircle className="text-blue-400 text-2xl" />
+    //           </span>
+    //           Last date on{" "}
+    //           <span className="font-semibold">
+    //             {new Date(event.dateTo).toDateString()}
+    //           </span>
+    //         </div>
+    //         <div className="flex gap-1 items-center font-semibold mb-1">
+    //           <BiSolidCategoryAlt className="text-yellow-400 text-2xl" />
+    //           {event.category}
+    //         </div>
+    //       </div>
+    //       <div className="flex flex-row items-center justify-content-between">
+    //         <div>
+    //           <span>i</span>
+    //           <span>Not Registered</span>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 
