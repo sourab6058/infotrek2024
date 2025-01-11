@@ -17,12 +17,19 @@ import "./styles/login.css";
 
 import { loginApi } from "../../api";
 import { emailRegex, passwordRegex } from "../../utils/constants";
+import AlertMini from "../components/AlertMini";
 
 function Login() {
   const { isLoggedIn, login, logout } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [show, setShow] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
+  const [alertTitle, setAlertTitle] = useState("");
+  const [variant, setVariant] = useState("primary");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,7 +41,10 @@ function Login() {
   async function signIn(e, data) {
     e.preventDefault();
     if (!passwordRegex.test(password) || !emailRegex.test(email)) {
-      alert("Password and/or email doesn't meet the criteria.");
+      setVariant("warning");
+      setAlertTitle("Wrong Email/Password.");
+      setAlertMsg("You have entered wrong email/password.");
+      setShow(true);
       return;
     }
     setLoading(true);
@@ -73,90 +83,111 @@ function Login() {
     } catch (err) {
       console.log("IM HERE");
       console.log(err);
-      alert("Login unsuccessfull.❌");
+      setVariant("danger");
+      setAlertTitle("Login Unsuccessful.");
+      setAlertMsg(
+        "Login was unsuccessful. If you think you are entering the right credentials, then contact the admin."
+      );
+      setShow(true);
       setLoading(false);
     }
   }
 
-  function handleLogout(e) {
-    logout();
-  }
-
   return (
-    <section className="login-section flex items-center justify-center min-h-screen bg-green-1000">
-      <div className="flex flex-col items-center justify-center text-off-white p-5 max-w-[90vw] sm:max-w-[60vw] lg:max-w-[45vw]">
-        <h2 className="text-4xl sm:text-5xl font-black">INFOTREK'24</h2>
-        <h1 className="text-6xl sm:text-7xl font-black mt-3 text-center">
-          GET STARTED
-        </h1>
-        <p className="text-xl sm:text-2xl text-center mt-3">
-          Embark on a digital journey with us. Explore, learn, and connect at
-          our exciting online events.
-        </p>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
-        />
-        <div className="w-100 d-flex items-center justify-items-center items-stretch h-100">
+    <>
+      <section className="login-section flex items-center justify-center min-h-screen bg-green-1000">
+        <div className="flex flex-col items-center justify-center text-off-white p-5 max-w-[90vw] sm:max-w-[60vw] lg:max-w-[45vw]">
+          <h2 className="text-4xl sm:text-5xl font-black">INFOTREK'24</h2>
+          <h1 className="text-6xl sm:text-7xl font-black mt-3 text-center">
+            GET STARTED
+          </h1>
+          <p className="text-xl sm:text-2xl text-center mt-3">
+            Embark on a digital journey with us. Explore, learn, and connect at
+            our exciting online events.
+          </p>
           <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
           />
-        </div>
-        <button
-          disabled={email.length === 0 || password.length === 0}
-          className={
-            email.length === 0 || password.length === 0
-              ? "p-2 w-100 rounded mt-3 text-2xl font-semibold border"
-              : "p-2 w-100 rounded mt-3 text-2xl font-semibold text-green-1000 bg-neon-80 border"
-          }
-          onClick={(e) => signIn(e, { email, password })}
-        >
-          {loading ? <div className="loader"></div> : "LOGIN"}
-        </button>
-        <div className="mt-2 text-xl">
-          New?
-          <Link
-            className="text-neon-100 ml-2 no-underline hover:text-neon-80"
-            to="/register"
+          <div className="w-100 d-flex items-center justify-items-center items-stretch h-100">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="text-green-1000 px-4 py-3 rounded w-100 text-xl decoration-none outline-none mb-3"
+            />
+          </div>
+          <button
+            disabled={email.length === 0 || password.length === 0}
+            className={
+              email.length === 0 || password.length === 0
+                ? "p-2 w-100 rounded mt-3 text-2xl font-semibold border"
+                : "p-2 w-100 rounded mt-3 text-2xl font-semibold text-green-1000 bg-neon-80 border"
+            }
+            onClick={(e) => signIn(e, { email, password })}
           >
-            Register
-          </Link>
+            {loading ? <div className="loader"></div> : "LOGIN"}
+          </button>
+          <div className="mt-2 text-xl">
+            New?
+            <Link
+              className="text-neon-100 ml-2 no-underline hover:text-neon-80"
+              to="/register"
+            >
+              Register
+            </Link>
+          </div>
+          <img
+            src={logs}
+            alt="img-1"
+            key={uuid()}
+            className="random-img img-1"
+          />
+          <img
+            src={hexa}
+            alt="img-3"
+            key={uuid()}
+            className="random-img img-3"
+          />
+          <img
+            src={boatload}
+            alt="img-2"
+            key={uuid()}
+            className="random-img img-2"
+          />
+          <img
+            src={deercliff}
+            alt="img-4"
+            key={uuid()}
+            className="random-img img-4"
+          />
+          <img
+            src={semicircle}
+            alt="img-5"
+            key={uuid()}
+            className="random-img img-5"
+          />
+          <img
+            src={sunrise}
+            alt="img-6"
+            key={uuid()}
+            className="random-img img-6"
+          />
         </div>
-        <img src={logs} alt="img-1" key={uuid()} className="random-img img-1" />
-        <img src={hexa} alt="img-3" key={uuid()} className="random-img img-3" />
-        <img
-          src={boatload}
-          alt="img-2"
-          key={uuid()}
-          className="random-img img-2"
-        />
-        <img
-          src={deercliff}
-          alt="img-4"
-          key={uuid()}
-          className="random-img img-4"
-        />
-        <img
-          src={semicircle}
-          alt="img-5"
-          key={uuid()}
-          className="random-img img-5"
-        />
-        <img
-          src={sunrise}
-          alt="img-6"
-          key={uuid()}
-          className="random-img img-6"
-        />
-      </div>
-    </section>
+      </section>
+      <AlertMini
+        message={alertMsg}
+        title={alertTitle}
+        show={show}
+        setShow={setShow}
+        variant={variant}
+        setVariant={setVariant}
+      />
+    </>
   );
 }
 

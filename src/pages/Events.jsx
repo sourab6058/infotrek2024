@@ -1,8 +1,12 @@
+import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
 import EventCard from "../components/EventCard";
 import Nav from "../components/Nav";
+import AlertMini from "../components/AlertMini";
+
 import { images } from "../assets/imgs";
 import "./styles/Events.css";
 
@@ -106,35 +110,50 @@ const events = [
 ];
 
 function Events() {
+  const [show, setShow] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
+  const [alertTitle, setAlertTitle] = useState("");
+  const [variant, setVariant] = useState("primary");
+
   return (
     <>
       <Nav />
       <div className="events" id="events">
         <div className="w-100 flex h-[40vh] bg-[#43754c] flex-row items-center justify-content-start pl-2 mb-2 text-white overflow-hidden custom-shadow-header">
           <div>
-            <p className="font-black text-5xl md:text-6xl">Featured Events</p>
-            <p className="ml-1 font-thin text-2xl md:text-3xl">
+            <span className="font-black text-5xl md:text-6xl">
+              Featured Events
+            </span>
+            <br />
+            <span className="ml-1 font-thin text-2xl md:text-3xl">
               Innovate. Code. Conquer.
-            </p>
+            </span>
           </div>
-          {/* <div className="bg-green-1000 sm:bg-white sm:w-[fit-content] sm:h-[fit-content] w-0 h-0 sm:p-0 p-2  rounded ">
-            <img
-              alt="a dog robot going for trekk in the mountains"
-              src={images.dogorobo}
-              className="sm:w-40 rounded w-0"
-            />
-          </div> */}
         </div>
         <Container className="events_container my-5">
           <Row style={{ paddingBottom: "2rem" }}>
             {events.map((event, idx) => (
               <Col xs={12} md={6} lg={4} key={event.id} className="mb-4">
-                <EventCard event={event} />
+                <EventCard
+                  event={event}
+                  setShow={setShow}
+                  setAlertMsg={setAlertMsg}
+                  setAlertTitle={setAlertTitle}
+                  setVariant={setVariant}
+                />
               </Col>
             ))}
           </Row>
         </Container>
       </div>
+      <AlertMini
+        message={alertMsg}
+        title={alertTitle}
+        show={show}
+        setShow={setShow}
+        variant={variant}
+        setVariant={setVariant}
+      />
     </>
   );
 }

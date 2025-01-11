@@ -10,9 +10,8 @@ import { AuthContext } from "../AuthContext";
 import { eventRegister, eventUnregister } from "../../api";
 import { Link } from "react-router-dom";
 
-const token = localStorage.getItem("auth_token");
-
-function EventCard({ event }) {
+function EventCard({ event, setAlertMsg, setShow, setAlertTitle, setVariant }) {
+  const token = localStorage.getItem("auth_token");
   const [registrationsOpen, setRegistrationsOpen] = useState(false);
   const [registered, setRegistered] = useState(false);
   const user = useContext(AuthContext);
@@ -25,12 +24,18 @@ function EventCard({ event }) {
 
   function handleRegister(event, registrationsOpen, user) {
     if (!user.isLoggedIn) {
-      alert("You need to login first. ❌");
+      setVariant("warning");
+      setAlertTitle("Login Required");
+      setAlertMsg("You need to login before registering for the event");
+      setShow(true);
       return;
     }
 
     if (!registrationsOpen) {
-      alert("Registrations are closed");
+      setVariant("danger");
+      setAlertTitle("Registrations are closed.");
+      setAlertMsg("You cannot register for an event after the last date.");
+      setShow(true);
       return;
     }
     axios
@@ -47,9 +52,11 @@ function EventCard({ event }) {
         }
       )
       .then((res) => {
-        console.log(res);
         if (res.status == 201) {
-          alert("You have been successfully registerd for the event.✅");
+          setVariant("success");
+          setAlertTitle("Event registered.");
+          setAlertMsg("You have been successfully registered for the event.");
+          setShow(true);
           let events = JSON.parse(localStorage.getItem("events"));
           events = [...events, res.data];
           user.setEvents(events);
@@ -60,10 +67,16 @@ function EventCard({ event }) {
       .catch((err) => {
         // console.error(err);
         if (err.response.status == 401) {
-          alert("➕You have already registerd for this event.➕");
+          setVariant("primary");
+          setAlertTitle("Event registered.");
+          setAlertMsg("You have already registereed for this event.");
+          setShow(true);
           setRegistered(true);
         } else {
-          alert("You are not logged in❗❗");
+          setVariant("warning");
+          setAlertTitle("You are not logged in.");
+          setAlertMsg("You have to login first.");
+          setShow(true);
         }
       });
   }
@@ -81,8 +94,12 @@ function EventCard({ event }) {
       )
       .then((res) => {
         // console.log(res);
-        if (res.status == 201)
-          alert("Unregsitered from the event successfully.✅");
+        if (res.status == 201) {
+          setVariant("success");
+          setAlertTitle("Event unregistered.");
+          setAlertMsg("You have successfully unregisterd from the event.");
+          setShow(true);
+        }
         let events = JSON.parse(localStorage.getItem("events"));
         events = events.filter((e) => e.event_id != event.id);
         user.setEvents(events);
@@ -91,8 +108,13 @@ function EventCard({ event }) {
       })
       .catch((err) => {
         // console.error(err);
-        if (err.response.status == 401)
-          alert("➕You have already unregisterd for this event.➕");
+        if (err.response.status == 401) {
+          setVariant("primary");
+          setAlertTitle("Event registered.");
+          setAlertMsg("You have already unregisterd from the event.");
+          setShow(true);
+          setRegistered(true);
+        }
         setRegistered(false);
       });
   }
@@ -117,7 +139,7 @@ function EventCard({ event }) {
             </Badge>
           </div>
           <Card.Text>
-            <p className="text-lg">{event.description}</p>
+            <span className="text-lg">{event.description}</span>
           </Card.Text>
           <div className="flex-col justify-between">
             <div className="flex gap-5">
@@ -149,10 +171,6 @@ function EventCard({ event }) {
                 <Button
                   className="min-w-64 "
                   disabled={new Date(event.date_to) < new Date().getTime()}
-                  // disabled={
-                  //   new Date(event.date_to) < new Date().getTime() ||
-                  //   !user.isLoggedIn
-                  // }
                   variant="success"
                   onClick={() => handleRegister(event, registrationsOpen, user)}
                 >
