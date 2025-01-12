@@ -130,10 +130,10 @@ function Events() {
             </span>
           </div>
         </div>
-        <Container className="events_container my-5">
+        <div className="events_container my-5">
           <Row style={{ paddingBottom: "2rem" }}>
             {events.map((event, idx) => (
-              <Col xs={12} md={8} lg={4} key={event.id} className="mb-4">
+              <Col xs={18} md={12} lg={6} key={event.id} className="mb-4">
                 <EventCard
                   event={event}
                   setShow={setShow}
@@ -144,7 +144,7 @@ function Events() {
               </Col>
             ))}
           </Row>
-        </Container>
+        </div>
       </div>
       <AlertMini
         message={alertMsg}

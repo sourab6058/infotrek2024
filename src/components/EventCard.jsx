@@ -1,7 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
+import { FaCheckCircle } from "react-icons/fa";
 import { AiFillClockCircle } from "react-icons/ai";
 import { BiSolidCategoryAlt } from "react-icons/bi";
+import { IoMdNotificationsOff, IoIosRemoveCircle } from "react-icons/io";
+import { IoAddOutline } from "react-icons/io5";
 import axios from "axios";
 import { Badge, Card, Button, Image } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
@@ -121,113 +124,158 @@ function EventCard({ event, setAlertMsg, setShow, setAlertTitle, setVariant }) {
       });
   }
   return (
-    <div className="event_card">
-      <Card style={{ margin: "1rem" }} key={uuidv4()}>
-        <Image
-          src={event?.img || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
-          className="img-fluid w-80"
-          alt={event.name}
-          style={{
-            maxHeight: "fit-content",
-            objectFit: "contain",
-            objectPosition: "center",
-          }} // Limit the height and ensure image covers space nicely
-        />
-        <Card.Body>
-          <div className="flex-col justify-between items-center pb-5">
-            <Card.Title>
-              <h2>{event.name}</h2>
-            </Card.Title>
-            <Badge bg={registrationsOpen ? "success" : "secondary"}>
-              {registrationsOpen
-                ? "Registrations Open"
-                : "Registrations Closed"}
-            </Badge>
-          </div>
-          <Card.Text>
-            <span className="text-lg">{event.description}</span>
-          </Card.Text>
-          <div className="flex-col justify-between">
-            <div className="flex gap-5">
-              <div className="flex flex-column gap-1">
-                <span>Last Date</span>
-                <span>Category</span>
-                <span>Location</span>
-              </div>
-              <div className="flex flex-column gap-1">
-                <span>{new Date(event.dateTo).toLocaleDateString()}</span>
-                <span>{event.category}</span>
-                <span>{event.location}</span>
-              </div>
-            </div>
-            <div className="flex justify-end items-center pt-3 min-w-100 gap-2">
-              {registered ? (
-                <Button
-                  className="min-w-64"
-                  // disabled={
-                  //   new Date(event.date_to) < new Date().getTime() ||
-                  //   !user.isLoggedIn
-                  // }
-                  variant="danger"
-                  onClick={() => handleUnregister(event)}
-                >
-                  <b>Unregister</b>
-                </Button>
-              ) : (
-                <Button
-                  className="min-w-64 "
-                  disabled={new Date(event.date_to) < new Date().getTime()}
-                  variant="success"
-                  onClick={() => handleRegister(event, registrationsOpen, user)}
-                >
-                  <b>Register</b>
-                </Button>
-              )}
-              <Link to="#" style={{ visibility: "hidden", width: 0 }}>
-                <Button>View More</Button>
-              </Link>
-            </div>
-          </div>
-        </Card.Body>
-      </Card>
-    </div>
-    // <div className="bg-white rounded shadow flex flex-column p-2">
-    //   <div className="flex flex-row gap-2 min-h-[250px]">
-    //     <img
-    //       src={event?.img || "https://via.placeholder.com/600x400"}
-    //       alt="Logo for the event"
-    //       className="w-50 rounded"
+    // <div className="event_card">
+    //   <Card style={{ margin: "1rem" }} key={uuidv4()}>
+    //     <Image
+    //       src={event?.img || "https://via.placeholder.com/600x400"} // Placeholder or event image URL
+    //       className="img-fluid w-80"
+    //       alt={event.name}
+    //       style={{
+    //         maxHeight: "fit-content",
+    //         objectFit: "contain",
+    //         objectPosition: "center",
+    //       }} // Limit the height and ensure image covers space nicely
     //     />
-    //     <div className="flex flex-column items-start justify-content-between">
-    //       <span className="font-bold text-3xl">{event.name}</span>
-    //       <div className="flex-column mt-2  text-slate-700">
-    //         <div className="flex gap-1 items-center font-semibold mb-1">
-    //           <FaLocationDot className="text-green-400 text-2xl" />
-    //           {event.location}
+    //     <Card.Body>
+    //       <div className="flex-col justify-between items-center pb-5">
+    //         <Card.Title>
+    //           <h2>{event.name}</h2>
+    //         </Card.Title>
+    //         <Badge bg={registrationsOpen ? "success" : "secondary"}>
+    //           {registrationsOpen
+    //             ? "Registrations Open"
+    //             : "Registrations Closed"}
+    //         </Badge>
+    //       </div>
+    //       <Card.Text>
+    //         <span className="text-lg">{event.description}</span>
+    //       </Card.Text>
+    //       <div className="flex-col justify-between">
+    //         <div className="flex gap-5">
+    //           <div className="flex flex-column gap-1">
+    //             <span>Last Date</span>
+    //             <span>Category</span>
+    //             <span>Location</span>
+    //           </div>
+    //           <div className="flex flex-column gap-1">
+    //             <span>{new Date(event.dateTo).toLocaleDateString()}</span>
+    //             <span>{event.category}</span>
+    //             <span>{event.location}</span>
+    //           </div>
     //         </div>
-    //         <div className="flex gap-1 items-center mb-1">
-    //           <span className="font-semibold">
-    //             <AiFillClockCircle className="text-blue-400 text-2xl" />
-    //           </span>
-    //           Last date on{" "}
-    //           <span className="font-semibold">
-    //             {new Date(event.dateTo).toDateString()}
-    //           </span>
-    //         </div>
-    //         <div className="flex gap-1 items-center font-semibold mb-1">
-    //           <BiSolidCategoryAlt className="text-yellow-400 text-2xl" />
-    //           {event.category}
+    //         <div className="flex justify-end items-center pt-3 min-w-100 gap-2">
+    //           {registered ? (
+    //             <Button
+    //               className="min-w-64"
+    //               // disabled={
+    //               //   new Date(event.date_to) < new Date().getTime() ||
+    //               //   !user.isLoggedIn
+    //               // }
+    //               variant="danger"
+    //               onClick={() => handleUnregister(event)}
+    //             >
+    //               <b>Unregister</b>
+    //             </Button>
+    //           ) : (
+    //             <Button
+    //               className="min-w-64 "
+    //               disabled={new Date(event.date_to) < new Date().getTime()}
+    //               variant="success"
+    //               onClick={() => handleRegister(event, registrationsOpen, user)}
+    //             >
+    //               <b>Register</b>
+    //             </Button>
+    //           )}
+    //           <Link to="#" style={{ visibility: "hidden", width: 0 }}>
+    //             <Button>View More</Button>
+    //           </Link>
     //         </div>
     //       </div>
-    //       <div className="flex flex-row items-center justify-content-between">
-    //         <div>
-    //           <span>i</span>
-    //           <span>Not Registered</span>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
+    //     </Card.Body>
+    //   </Card>
     // </div>
+    <div
+      className="bg-white rounded shadow flex flex-column p-2 h-100 gap-1"
+      key={uuidv4()}
+    >
+      <div className="flex flex-row gap-2 min-h-[250px]">
+        <img
+          src={event?.img || "https://via.placeholder.com/600x400"}
+          alt="Logo for the event"
+          className="w-50 rounded"
+        />
+        <div className="flex flex-column items-start justify-content-between w-100">
+          <span className="font-bold text-3xl mt-2">{event.name}</span>
+          <div className="flex-column mt-2  text-slate-700 w-100">
+            <div className="flex gap-1 items-center font-semibold mb-1">
+              <FaLocationDot className="text-green-400 text-2xl" />
+              {event.location}
+            </div>
+            <div className="flex gap-1 items-center mb-1">
+              <span className="font-semibold">
+                <AiFillClockCircle className="text-blue-400 text-2xl" />
+              </span>
+              Last date on{" "}
+              <span className="font-semibold">
+                {new Date(event.dateTo).toDateString()}
+              </span>
+            </div>
+            <div className="flex gap-1 items-center font-semibold mb-1">
+              <BiSolidCategoryAlt className="text-yellow-400 text-2xl" />
+              {event.category}
+            </div>
+          </div>
+          <div className="flex flex-row items-center justify-content-around w-100">
+            {registered ? (
+              <>
+                <div className="flex flex-row items-center justify-content-center p-1 rounded bg-green-200 h-100 w-50 mr-1">
+                  <span className="text-xl text-white mr-1">
+                    <FaCheckCircle />
+                  </span>
+                  <small className="font-bold"> Registered</small>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-row items-center justify-content-center p-1 rounded bg-slate-200 h-100 w-50 mr-1">
+                  <span className="text-xl mr-1">
+                    <IoMdNotificationsOff />
+                  </span>
+                  <small className="font-bold"> Not Registered</small>
+                </div>
+              </>
+            )}
+            {registrationsOpen ? (
+              <div className="p-1 rounded font-bold text-sm bg-green-200 text-center w-50">
+                Open
+              </div>
+            ) : (
+              <div className="p-1 rounded font-bold text-sm bg-slate-200 text-center w-50">
+                Closed
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-column gap-1 items-start justify-content-between h-100">
+        <div className="font-semibold">{event.description}</div>
+        {registered ? (
+          <button
+            onClick={() => handleUnregister(event)}
+            className="w-100 text-white text-center p-1 bg-red-500 hover:bg-red-400 rounded font-bold"
+          >
+            Unregister
+          </button>
+        ) : (
+          <button
+            onClick={() => handleRegister(event, registrationsOpen, user)}
+            className="w-100 text-white text-center p-1 bg-green-500 hover:bg-green-400 rounded font-bold"
+          >
+            Register Now
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
